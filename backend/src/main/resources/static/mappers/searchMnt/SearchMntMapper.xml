@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jumpstd.mukpick.admin.mapper.SearchMntMapper">
+    <select id="findBySearchText" resultType="com.jumpstd.mukpick.admin.domain.SearchMntDomain" parameterType="String">
+        SELECT SEARCH_NO
+             , SEARCH_TEXT
+             , VALID_DATE
+             , REGISTER_DATE
+             , SEARCH_CNT
+        FROM TB_SEARCH_MNT
+        WHERE SEARCH_TEXT = #{searchText}
+    </select>
+    <select id="findBySearchNo" resultType="com.jumpstd.mukpick.admin.domain.SearchMntDomain" parameterType="Long">
+        SELECT SEARCH_NO
+             , SEARCH_TEXT
+             , VALID_DATE
+             , REGISTER_DATE
+             , SEARCH_CNT
+        FROM TB_SEARCH_MNT
+        WHERE SEARCH_NO = #{searchNo}
+    </select>
+    <select id="findList" resultType="com.jumpstd.mukpick.admin.domain.SearchMntDomain" parameterType="com.jumpstd.mukpick.admin.dto.SearchRequestDto">
+        SELECT SEARCH_NO
+             , SEARCH_TEXT
+             , VALID_DATE
+             , REGISTER_DATE
+             , SEARCH_CNT
+        FROM TB_SEARCH_MNT
+        WHERE 1=1
+        <if test="searchText!=null">
+            AND SEARCH_TEXT LIKE '%' || #{searchText} || '%'
+        </if>
+        <if test="end != 0">
+          AND ROWNUM BTWEEN #{start} AND #{end}
+        </if>
+        ORDER BY SEARCH_CNT<if test='asc == false'> DESC</if>
+    </select>
+    <insert id="save" parameterType="String">
+        INSERT
+        INTO TB_SEARCH_MNT ( SEARCH_NO
+                            , SEARCH_TEXT
+                            ,VALID_DATE)
+        VALUES ( SEQ_SEARCH_NO.NEXTVAL,
+                 #{searchText},
+                SYSDATE + FN_GET_SEARCH_VALID_DATE )
+    </insert>
+    <delete id="delete" parameterType="Long">
+        DELETE FROM TB_SEARCH_MNT WHERE SEARCH_NO = #{searchNo}
+    </delete>
+    <delete id="deleteAll">
+        DELETE FROM TB_SEARCH_MNT
+    </delete>
+    <update id="changeValidDate" parameterType="com.jumpstd.mukpick.admin.dto.SearchValidDateRequestDto">
+        UPDATE TB_SEARCH_MNT
+        SET VALID_DATE = #{changeDate}
+        WHERE SEARCH_NO =#{searchNo}
+    </update>
+</mapper>
