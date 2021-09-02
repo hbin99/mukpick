@@ -12,11 +12,13 @@ public interface SearchMntService {
 
     SearchResponseDto findBySearchText(String searchText);
 
+    SearchResponseDto findBySearchNo(Long searchNo);
+
     void saveSearchText(String searchText);
 
     void deleteSearchText(Long searchNo);
 
     void deleteSearchTextAll();
 
-    void changeValidDate(SearchValidDateRequestDto dto);
+    SearchResponseDto changeValidDate(SearchValidDateRequestDto dto);
 }

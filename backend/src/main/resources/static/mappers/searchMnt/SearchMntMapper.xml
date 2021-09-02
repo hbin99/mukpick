@@ -13,6 +13,15 @@
         FROM TB_SEARCH_MNT
         WHERE SEARCH_TEXT = #{searchText}
     </select>
+    <select id="findBySearchNo" resultType="com.jumpstd.mukpick.admin.domain.SearchMntDomain" parameterType="Long">
+        SELECT SEARCH_NO
+             , SEARCH_TEXT
+             , VALID_DATE
+             , REGISTER_DATE
+             , SEARCH_CNT
+        FROM TB_SEARCH_MNT
+        WHERE SEARCH_NO = #{searchNo}
+    </select>
     <select id="findList" resultType="com.jumpstd.mukpick.admin.domain.SearchMntDomain" parameterType="com.jumpstd.mukpick.admin.dto.SearchRequestDto">
         SELECT SEARCH_NO
              , SEARCH_TEXT

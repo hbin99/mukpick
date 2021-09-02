@@ -38,6 +38,15 @@ public class SearchMntServiceImpl implements SearchMntService{
     }
 
     @Override
+    public SearchResponseDto findBySearchNo(Long searchNo) {
+        SearchMntDomain searchData = searchMntDao.findBySearchNo(searchNo);
+        if(searchData != null){
+            return searchData.getSearchMntDto();
+        }
+        return null;
+    }
+
+    @Override
     public void saveSearchText(String searchText) {
         searchMntDao.saveOne(searchText);
     }
@@ -53,7 +62,13 @@ public class SearchMntServiceImpl implements SearchMntService{
     }
 
     @Override
-    public void changeValidDate(SearchValidDateRequestDto dto) {
+    public SearchResponseDto changeValidDate(SearchValidDateRequestDto dto) {
         searchMntDao.changeValidDate(dto);
+        SearchMntDomain searchData = searchMntDao.findBySearchNo(dto.getSearchNo());
+        if(searchData == null){
+            return null;
+        }
+        return searchData.getSearchMntDto();
+
     }
 }

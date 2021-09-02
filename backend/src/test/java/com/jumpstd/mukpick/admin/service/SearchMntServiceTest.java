@@ -73,6 +73,7 @@ class SearchMntServiceTest {
     }
 
     @Test
+    @DisplayName("전체 삭제")
     public void deleteAll() {
         // given
         searchMntService.deleteSearchTextAll();
@@ -85,6 +86,7 @@ class SearchMntServiceTest {
 //    void changeValidDate(SearchValidDateRequestDto dto);
 
     @Test
+    @DisplayName("유효기간 업데이트")
     public void changeValidDate() throws Exception {
         // given
         String searchText = "라볶이";

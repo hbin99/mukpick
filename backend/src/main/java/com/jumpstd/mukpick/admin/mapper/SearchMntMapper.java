@@ -11,6 +11,8 @@ import java.util.List;
 public interface SearchMntMapper {
     SearchMntDomain findBySearchText(String searchText);
 
+    SearchMntDomain findBySearchNo(Long searchNo);
+    
     List<SearchMntDomain> findList(SearchRequestDto searchRequestDTO);
 
     int save(String searchText);
@@ -20,4 +22,6 @@ public interface SearchMntMapper {
     int deleteAll();
 
     int changeValidDate(SearchValidDateRequestDto searchValidDateRequestDto);
+    
+    
 }

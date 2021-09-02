@@ -1,6 +1,7 @@
 package com.jumpstd.mukpick.admin.domain;
 
 import com.jumpstd.mukpick.admin.dto.SearchResponseDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -8,7 +9,7 @@ import lombok.ToString;
 import java.util.Date;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 @ToString
 public class SearchMntDomain {
     private Long searchNo;

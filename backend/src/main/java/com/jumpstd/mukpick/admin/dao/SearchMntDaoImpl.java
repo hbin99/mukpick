@@ -2,7 +2,6 @@ package com.jumpstd.mukpick.admin.dao;
 
 import com.jumpstd.mukpick.admin.domain.SearchMntDomain;
 import com.jumpstd.mukpick.admin.dto.SearchRequestDto;
-import com.jumpstd.mukpick.admin.dto.SearchResponseDto;
 import com.jumpstd.mukpick.admin.dto.SearchValidDateRequestDto;
 import com.jumpstd.mukpick.admin.mapper.SearchMntMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +43,10 @@ public class SearchMntDaoImpl implements SearchMntDao{
     @Override
     public int changeValidDate(SearchValidDateRequestDto dto) {
         return searchMntMapper.changeValidDate(dto);
+    }
+
+    @Override
+    public SearchMntDomain findBySearchNo(Long searchNo) {
+        return searchMntMapper.findBySearchNo(searchNo);
     }
 }

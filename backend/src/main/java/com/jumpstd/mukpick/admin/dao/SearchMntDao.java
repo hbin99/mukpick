@@ -12,6 +12,9 @@ public interface SearchMntDao {
 
     SearchMntDomain findBySearchText(String searchText);
 
+    SearchMntDomain findBySearchNo(Long searchNo);
+
+
     int deleteOne(long searchNo);
 
     int deleteAll();
