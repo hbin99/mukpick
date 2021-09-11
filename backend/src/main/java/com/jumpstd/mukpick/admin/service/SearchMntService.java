@@ -21,4 +21,6 @@ public interface SearchMntService {
     void deleteSearchTextAll();
 
     SearchResponseDto changeValidDate(SearchValidDateRequestDto dto);
+
+    int transferToFood(Long searchNo);
 }

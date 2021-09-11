@@ -49,4 +49,9 @@ public class SearchMntDaoImpl implements SearchMntDao{
     public SearchMntDomain findBySearchNo(Long searchNo) {
         return searchMntMapper.findBySearchNo(searchNo);
     }
+
+    @Override
+    public int transferToFood(Long searchNo) {
+        return searchMntMapper.transferToFood(searchNo);
+    }
 }
