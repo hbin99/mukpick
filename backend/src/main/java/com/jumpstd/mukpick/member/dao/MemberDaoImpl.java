@@ -5,6 +5,8 @@ import com.jumpstd.mukpick.member.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class MemberDaoImpl implements MemberDao{
     @Autowired
@@ -29,6 +31,10 @@ public class MemberDaoImpl implements MemberDao{
     @Override
     public String userIdFind(MemberDto memberDto){
         return MemberMapper.userIdFind(memberDto);
+    }
+    @Override
+    public int userAuthCheck(Map<String,Object> paramMap){
+        return MemberMapper.userAuthCheck(paramMap);
     }
 
 }

@@ -161,5 +161,31 @@ public class MemberServiceImpl implements MemberService{
         resultMap = mailService.mailSend(mailDto);
         return resultMap;
     }
+    @Override
+    public Map<String,Object> memberCheckAuth(Map<String,Object> paramMap){
+        Map<String,Object> resultMap = new HashMap<>();
+        String flag = paramMap.get("flag").toString();
+        //인증키를 db에 저장
+        MemberDto memberDto = new MemberDto();
+        memberDto.setUserId(paramMap.get("userId").toString());
+        int userChk = memberDao.userAuthCheck(paramMap);
+        if(flag.equals("join")){//회원가입
+            if(userChk == 1){//회원존재
+                memberDto.setRoleType('2');
+                int updateUSerRole = memberDao.update(memberDto);
+            }else{
+                //실패
+            }
+        }else if(flag.equals("out")){//탈퇴
+            if(userChk == 1){//회원존재
+                memberDto.setRoleType('3');
+                int updateUSerRole = memberDao.update(memberDto);
+            }else{
+                //실패
+            }
+        }
+
+        return resultMap;
+    }
 
 }

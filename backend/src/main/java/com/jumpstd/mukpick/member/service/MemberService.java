@@ -19,4 +19,6 @@ public interface MemberService {
     public Map<String,Object> memberOutSend(MemberDto memberDto);
 
     public Map<String,Object> memberOut(MemberDto memberDto);
+
+    public Map<String,Object> memberCheckAuth(Map<String,Object> paramMap);
 }

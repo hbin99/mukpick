@@ -30,28 +30,13 @@ class MemberMntTest {
     @Autowired
     MailService mailService;
 
-    @Test
-    @DisplayName("아이디 중복체크")
-    public void chkUserId(){
-        String user_id ="test2";
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserId(user_id);
-        memberService.checkUserId(memberDto);
-
-
-        List<MemberDto> list = mapper.userList(memberDto);
-        for(MemberDto dto : list){
-            System.out.println("회원정보 : " + dto.toString());
-        }
-
-    }
-    @Test
-    @DisplayName("회원가입 신청 후 메일 전송")
-    public void registerSendMail(){
+    @BeforeEach
+    @DisplayName("Member insert")
+    public void param(){
         MemberDto dto = new MemberDto();
         dto.setUserId("test2");
         dto.setAge(23);
-        dto.setEmail("hyebin9612@gmail.com");
+        dto.setEmail("hyebin9613@gmail.com");
         dto.setPassword("test123");
         dto.setProfileImg("");
         dto.setPhone("010-2222-1111");
@@ -59,12 +44,37 @@ class MemberMntTest {
         dto.setRoleType('2');
         dto.setUserName("테스트");
 
-        Map<String,Object> returnMap =memberService.register(dto);
+        mapper.register(dto);
+    }
 
-        List<MemberDto> list = mapper.userList(dto);
-        for(MemberDto dto1 : list){
-            System.out.println("회원정보 : " + dto1.toString());
-        }
+    @Test
+    @DisplayName("아이디 중복체크")
+    public void chkUserId(){
+        String user_id ="test";
+        MemberDto memberDto = new MemberDto();
+        memberDto.setUserId(user_id);
+        int chk = memberService.checkUserId(memberDto);
+
+        System.out.println(chk);
+        assertThat(chk).isNotZero();
+    }
+    @Test
+    @DisplayName("회원가입 신청 후 메일 전송")
+    public void registerSendMail(){
+        MemberDto dto = new MemberDto();
+        dto.setUserId("test3");
+        dto.setAge(23);
+        dto.setEmail("hyebin9612@gmail.com");
+        dto.setPassword("test123");
+        dto.setProfileImg("");
+        dto.setPhone("010-2222-2222");
+        dto.setGender('F');
+        dto.setRoleType('2');
+        dto.setUserName("테스트");
+
+        Map<String,Object> returnMap = memberService.register(dto);
+
+        assertThat(returnMap.get("CODE")).isEqualTo("S");
         System.out.println(returnMap.get("RESULT_MSG"));
 
     }
@@ -164,12 +174,12 @@ class MemberMntTest {
         dto.setPhone("010-1111-1111");
         dto.setGender('F');
         dto.setRole_type('2');
-        dto.setUser_name("테스트");
+        dto.setUser_name("테스트");*/
         MailDto mailDto = new MailDto();
         mailDto.setTitle("테스트 메일입니다.");
         mailDto.setContext("테스트 메일입니다.");
         mailDto.setAddress("hyebin9612@gmail.com");
-        mailService.mailSend(mailDto);*/
+        mailService.mailSend(mailDto);
         // System.out.println(mapper.register(dto));
 
     }

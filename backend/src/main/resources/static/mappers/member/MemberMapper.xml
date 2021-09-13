@@ -13,13 +13,13 @@
 
     <select id="checkUser" resultType="int" parameterType="com.jumpstd.mukpick.member.dto.MemberDto">
         SELECT
-            COUNT(USER_ID)
+            COUNT(*)
         FROM TB_USER
         WHERE USER_ID = #{userId}
-        <if test='email != "" || email != null '>
+        <if test='email != "" and email != null '>
             AND EMAIL = #{email}
         </if>
-        <if test='password != "" || password != null '>
+        <if test='password != "" and password != null '>
             AND PASSWORD = #{password}
         </if>
     </select>
@@ -51,22 +51,22 @@
     <update id="update" parameterType="com.jumpstd.mukpick.member.dto.MemberDto" >
         UPDATE TB_USER
         SET
-        <if test='password != "" || password != null '>
+        <if test='password != "" and password != null '>
             PASSWORD = #{password}
         </if>
-        <if test='phone != "" || phone != null '>
+        <if test='phone != "" and phone != null '>
           ,PHONE = #{phone}
         </if>
-        <if test='profileImg != "" || profileImg != null '>
+        <if test='profileImg != "" and profileImg != null '>
           ,PROFILE_IMG =#{profileImg}
         </if>
-        <if test='email != "" || email != null '>
+        <if test='email != "" and email != null '>
           ,EMAIL = #{email}
         </if>
-        <if test='age != "" || age != null '>
+        <if test='age != "" and age != null '>
           ,AGE = #{age}
         </if>
-        <if test='roleType != "" || roleType != null '>
+        <if test='roleType != "" and roleType != null '>
             ,ROLE_TYPE = #{roleType}
         </if>
         WHERE USER_ID = #{userId}
@@ -78,6 +78,13 @@
         WHERE EMAIL = #{email}
         AND USER_NAME = #{userName}
         AND PHONE = #{phone}
+    </select>
+
+    <select id="userAuthCheck" resultType="int" parameterType="hashMap">
+        SELECT COUNT(USER_ID)
+        FROM TB_USER
+        WHERE USER_ID = #{userId}
+          AND AUTHKEY = #{key}
     </select>
 
 

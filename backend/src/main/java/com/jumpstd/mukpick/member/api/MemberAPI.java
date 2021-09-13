@@ -91,5 +91,17 @@ public class MemberAPI {
         Map<String,Object> resultMap =  MemberService.memberOut(memberDto);
         return resultMap;
     }
+    @GetMapping("/member/{flag}/{key}/{userId}")
+    public Map<String,Object> memberCheckAuth(
+            @PathVariable("userId") String user_id,
+            @PathVariable("key") String key,
+            @PathVariable("flag") String flag){
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put("userId",user_id);
+        paramMap.put("key",key);
+        paramMap.put("flag",flag);
+        Map<String,Object> resultMap =  MemberService.memberCheckAuth(paramMap);
+        return resultMap;
+    }
 
 }
