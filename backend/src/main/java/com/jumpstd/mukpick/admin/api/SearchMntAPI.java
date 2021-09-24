@@ -5,12 +5,13 @@ import com.jumpstd.mukpick.admin.dto.SearchRequestDto;
 import com.jumpstd.mukpick.admin.dto.SearchResponseDto;
 import com.jumpstd.mukpick.admin.dto.SearchValidDateRequestDto;
 import com.jumpstd.mukpick.admin.service.SearchMntService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Slf4j
 @RequestMapping("/api/admin/search")
 @RestController
 public class SearchMntAPI {
@@ -26,6 +27,7 @@ public class SearchMntAPI {
     @GetMapping
     public ResponseEntity<List<SearchResponseDto>> saerchAllList(SearchRequestDto request){
         List<SearchResponseDto> responses = searchMntService.findSearchList(request);
+
         return ResponseEntity.ok(responses);
     }
 
