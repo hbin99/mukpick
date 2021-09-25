@@ -1,8 +1,12 @@
 package com.jumpstd.mukpick.member.dao;
 
+import com.jumpstd.mukpick.config.RollType;
 import com.jumpstd.mukpick.mail.dto.MailDto;
 import com.jumpstd.mukpick.mail.service.MailService;
 import com.jumpstd.mukpick.member.dto.MemberDto;
+import com.jumpstd.mukpick.member.dto.SearchUserIdMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
 import com.jumpstd.mukpick.member.mapper.MemberMapper;
 import com.jumpstd.mukpick.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,24 +41,24 @@ class MemberMntTest {
         MemberDto dto = new MemberDto();
         dto.setUserId("test2");
         dto.setAge(23);
-        dto.setEmail("hyebin9613@gmail.com");
+        dto.setEmail("hyebin9612@gmail.com");
         dto.setPassword("test123");
         dto.setProfileImg("");
         dto.setPhone("010-2222-1111");
         dto.setGender('F');
-        dto.setRoleType('2');
+        dto.setRoleType(RollType.USER.getValue());
         dto.setUserName("테스트");
 
         mapper.register(dto);
     }
 
     @Test
-    @DisplayName("아이디 중복체크")
+    @DisplayName("id check")
     public void chkUserId(){
         String user_id ="test";
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserId(user_id);
-        int chk = memberService.checkUserId(memberDto);
+        SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
+        searchVaildMemberDto.setUserId(user_id);
+        int chk = memberService.checkUserId(searchVaildMemberDto);
 
         System.out.println(chk);
         assertThat(chk).isNotZero();
@@ -62,14 +67,15 @@ class MemberMntTest {
     @DisplayName("회원가입 신청 후 메일 전송")
     public void registerSendMail(){
         MemberDto dto = new MemberDto();
-        dto.setUserId("test3");
+        dto.setUserId("tjdus1994");
         dto.setAge(23);
-        dto.setEmail("hyebin9612@gmail.com");
+        dto.setEmail("dbseoyyyy@gmail.com");
+       // dto.setEmail("hyebin9612@gmail.com");
         dto.setPassword("test123");
         dto.setProfileImg("");
-        dto.setPhone("010-2222-2222");
+        dto.setPhone("010-2222-6666");
         dto.setGender('F');
-        dto.setRoleType('2');
+        dto.setRoleType(RollType.BEFORE_SING_UP_USER.getValue());
         dto.setUserName("테스트");
 
         Map<String,Object> returnMap = memberService.register(dto);
@@ -85,7 +91,7 @@ class MemberMntTest {
         // given
         MemberDto memberDto = new MemberDto();
         memberDto.setUserId("test2");
-        memberDto.setRoleType('2');
+        memberDto.setRoleType(RollType.USER.getValue());
         // when
         memberService.update(memberDto);
         // then
@@ -98,24 +104,24 @@ class MemberMntTest {
     @DisplayName("아이디 찾기")
     public void userIdFind() {
         // given
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserName("테스트");
-        memberDto.setEmail("hyebin9612@gmail.com");
-        memberDto.setPhone("010-2222-1111");
+        SearchUserIdMemberDto searchUserIdMemberDto = new SearchUserIdMemberDto();
+        searchUserIdMemberDto.setUserName("테스트");
+        searchUserIdMemberDto.setEmail("tjdud1994@gmail.com");
+        searchUserIdMemberDto.setPhone("010-2222-2222");
         // when
-        Map<String,Object> returnMap = memberService.userIdFind(memberDto);
+        Map<String,Object> returnMap = memberService.userIdFind(searchUserIdMemberDto);
         // then
         System.out.println(returnMap.get("RESULT_MSG"));
     }
     @Test
-    @DisplayName("임시비밀번호 발급")
+    @DisplayName("비밀번호 찾기")
     public void passwordFind() {
         // given
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserId("test2");
-        memberDto.setEmail("hyebin9612@gmail.com");
+        SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
+        searchVaildMemberDto.setUserId("test2");
+        searchVaildMemberDto.setEmail("tjdud1994@gmail.com");
         // when
-        Map<String,Object> returnMap =memberService.passwordFind(memberDto);
+        Map<String,Object> returnMap =memberService.passwordFind(searchVaildMemberDto);
         // then
         System.out.println(returnMap.get("RESULT_MSG"));
     }
@@ -124,8 +130,8 @@ class MemberMntTest {
     public void update() {
         // given
         MemberDto memberDto = new MemberDto();
-        memberDto.setUserId("test2");
-        memberDto.setEmail("hyebin9612@gmail.com");
+        memberDto.setUserId("test");
+        memberDto.setEmail("test123@gmail.com");
         memberDto.setPhone("010-1234-5678");
         memberDto.setAge(13);
         // when
@@ -140,12 +146,9 @@ class MemberMntTest {
     @DisplayName("회원탈퇴 메일 전송")
     public void memberOutSend() {
         // given
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserId("test2");
-        memberDto.setPassword("test123");
-        memberDto.setEmail("hyebin9612@gmail.com");
+        String user_id = "test2";
         // when
-        Map<String,Object> returnMap = memberService.memberOutSend(memberDto);
+        Map<String,Object> returnMap = memberService.dropByUserMail(user_id);
         // then
         System.out.println(returnMap.get("RESULT_MSG"));
     }
@@ -153,13 +156,15 @@ class MemberMntTest {
     @DisplayName("회원탈퇴")
     public void memberOut() {
         // given
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserId("test2");
-
+        SearchVaildAuthMemberDto searchVaildAuthMemberDto = new SearchVaildAuthMemberDto();
+        searchVaildAuthMemberDto.setUserId("test2");
+        searchVaildAuthMemberDto.setKey("");
+        searchVaildAuthMemberDto.setFlag("OutSend");
         // when
-        Map<String,Object> returnMap = memberService.memberOut(memberDto);
+        Map<String,Object> returnMap = memberService.memberUpdateAuth(searchVaildAuthMemberDto);
         // then
         System.out.println(returnMap.get("RESULT_MSG"));
+
     }
 
     @Test
@@ -176,10 +181,15 @@ class MemberMntTest {
         dto.setRole_type('2');
         dto.setUser_name("테스트");*/
         MailDto mailDto = new MailDto();
-        mailDto.setTitle("테스트 메일입니다.");
-        mailDto.setContext("테스트 메일입니다.");
-        mailDto.setAddress("hyebin9612@gmail.com");
-        mailService.mailSend(mailDto);
+        try {
+            mailDto.setTitle("테스트 메일입니다.");
+            mailDto.setContext("테스트 메일입니다.");
+            mailDto.setAddress("tjdud1994@gmail.com");
+
+            mailService.mailSend(mailDto);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         // System.out.println(mapper.register(dto));
 
     }

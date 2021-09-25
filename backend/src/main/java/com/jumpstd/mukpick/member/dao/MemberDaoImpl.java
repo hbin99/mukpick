@@ -1,6 +1,9 @@
 package com.jumpstd.mukpick.member.dao;
 
 import com.jumpstd.mukpick.member.dto.MemberDto;
+import com.jumpstd.mukpick.member.dto.SearchUserIdMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
 import com.jumpstd.mukpick.member.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,8 +16,8 @@ public class MemberDaoImpl implements MemberDao{
     private MemberMapper MemberMapper;
 
     @Override
-    public int checkUser(MemberDto memberDto){
-        return MemberMapper.checkUser(memberDto);
+    public int checkUser(SearchVaildMemberDto searchVaildMemberDto){
+        return MemberMapper.checkUser(searchVaildMemberDto);
     }
     @Override
     public int register(MemberDto memberDto){
@@ -24,17 +27,19 @@ public class MemberDaoImpl implements MemberDao{
     public int update(MemberDto memberDto){
         return MemberMapper.update(memberDto);
     }
+
     @Override
-    public int passwordReset(MemberDto memberDto){
-        return MemberMapper.passwordReset(memberDto);
+    public String userIdFind(SearchUserIdMemberDto searchUserIdMemberDto){
+        return MemberMapper.userIdFind(searchUserIdMemberDto);
     }
     @Override
-    public String userIdFind(MemberDto memberDto){
-        return MemberMapper.userIdFind(memberDto);
+    public int userAuthCheck(SearchVaildAuthMemberDto searchVaildAuthMemberDto){
+        return MemberMapper.userAuthCheck(searchVaildAuthMemberDto);
     }
+
     @Override
-    public int userAuthCheck(Map<String,Object> paramMap){
-        return MemberMapper.userAuthCheck(paramMap);
+    public MemberDto findByUserData(String userId){
+        return MemberMapper.findByUserData(userId);
     }
 
 }

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.mail.MessagingException;
+
 @Controller
 public class MailAPI {
 
@@ -13,7 +15,11 @@ public class MailAPI {
 
     @GetMapping("/mail")
     public void mailSend(MailDto mailDto){
-        mailService.mailSend(mailDto);
+        try {
+            mailService.mailSend(mailDto);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 
     }
 }
