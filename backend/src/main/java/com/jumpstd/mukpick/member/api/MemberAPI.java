@@ -1,10 +1,13 @@
 package com.jumpstd.mukpick.member.api;
 
-import com.jumpstd.mukpick.mail.dto.MailDto;
 import com.jumpstd.mukpick.mail.service.MailService;
 
 import com.jumpstd.mukpick.member.dto.MemberDto;
+import com.jumpstd.mukpick.member.dto.SearchUserIdMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
 import com.jumpstd.mukpick.member.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 @RestController
 @RequestMapping("/member/**")
+@Slf4j
 public class MemberAPI {
 
     @Autowired
     private MemberService MemberService;
-    @Autowired
-    private MailService mailService;
 
     @GetMapping("/register")
     public String joinForm(){
@@ -28,11 +30,17 @@ public class MemberAPI {
         return "";
     }
 
-    //아이디 중복체크
+    /**
+     *
+     * 아이디 중복체크 (회원가입)
+     * @param user_id
+     * @return
+     */
     @GetMapping("/register/{userid}")
-    public Map<String,Object> checkUserId(//@PathVariable("userid") String user_id
-                                          MemberDto memberDto ){
-        int resultFlag = MemberService.checkUserId(memberDto);
+    public Map<String,Object> checkUserId(@PathVariable("userid") String user_id){
+        SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
+        searchVaildMemberDto.setUserId(user_id);
+        int resultFlag = MemberService.checkUserId(searchVaildMemberDto);
         Map<String,Object> resultMap = new HashMap<String,Object>();
         if(resultFlag == 1){
             resultMap.put("RESULT_MSG", "이미 사용중이거나 탈퇴한 아이디입니다.");
@@ -43,30 +51,49 @@ public class MemberAPI {
         return resultMap;
     }
 
-    //회원가입
+    /**
+     * 회원가입
+     * 회원가입 확인 메일 전송(로그인 가능한 단계 X) > 메일 확인 클릭 > 로그인 가능한 단계로 update
+     * @param memberDto
+     * @return
+     */
     @PostMapping("/register")
-    public Map<String,Object> register(MemberDto memberDto){
+    public Map<String,Object> register(@RequestBody MemberDto memberDto){
         Map<String,Object> resultMap = MemberService.register(memberDto);
         return resultMap;
     }
 
-    //비밀번호 찾기
-    @PostMapping("/password-find")
-    public Map<String,Object>  passwordFind(MemberDto memberDto){
-        Map<String,Object> passwordFind = MemberService.passwordFind(memberDto);
+    /**
+     * 비밀번호 찾기 (메일전송)
+     * 회원정보가 존재하는지 유무 > 존재하면 메일전송 > 메일 확인 클릭 > 비밀번호 입력 페이지 open
+     *
+     * @param searchVaildMemberDto
+     * @return
+     */
+    @PostMapping("/password-find-mail")
+    public Map<String,Object>  passwordFind(@RequestBody SearchVaildMemberDto searchVaildMemberDto){
+        Map<String,Object> passwordFind = MemberService.passwordFind(searchVaildMemberDto);
         return passwordFind;
     }
 
-    //아이디 찾기
+    /**
+     * 아이디 찾기
+     * @param
+     * @return
+     */
     @PostMapping("/user-find")
-    public Map<String,Object> userIdFind(MemberDto memberDto){
-        Map<String,Object> userIdFind = MemberService.userIdFind(memberDto);
+    public Map<String,Object> userIdFind(@RequestBody SearchUserIdMemberDto searchUserIdMemberDto){
+        Map<String,Object> userIdFind = MemberService.userIdFind(searchUserIdMemberDto);
         return userIdFind;
     }
 
-    //회원정보 수정
+    /**
+     * 회원정보 수정
+     * @param memberDto
+     * @return
+     */
     @PostMapping("/update")
-    public Map<String,Object> update(MemberDto memberDto){
+    public Map<String,Object> update(@RequestBody MemberDto memberDto){
         int resultFlag = MemberService.update(memberDto);
         Map<String,Object> resultMap = new HashMap<String,Object>();
         //파일 등록
@@ -79,29 +106,31 @@ public class MemberAPI {
         return resultMap;
     }
 
-    //회원탈퇴 관련 메일 전송
-    public Map<String,Object> memberOutMailSend(MemberDto memberDto){
-        Map<String,Object> resultMap =  MemberService.memberOutSend(memberDto);
+    /**
+     * 회원탈퇴하기 전 메일 전송
+     * @param
+     * @return
+     */
+    @PostMapping("/drop-user-mail")
+    public Map<String,Object> dropByUserMail(@PathVariable("userid") String user_id){
+        Map<String,Object> resultMap =  MemberService.dropByUserMail(user_id);
         return resultMap;
     }
 
-    //회원 탈퇴
-    @PatchMapping("/member/{userId}")
-    public Map<String,Object> memberOut(MemberDto memberDto){
-        Map<String,Object> resultMap =  MemberService.memberOut(memberDto);
-        return resultMap;
-    }
+
+    /**
+     * 회원탈퇴(메일 클릭 후 탈퇴완료)
+     * 비밀번호 찾기 (메일 클릭 후 비밀번호 변경창)
+     * 회원가입 완료 (로그인 가능)
+     * @return
+     */
     @GetMapping("/member/{flag}/{key}/{userId}")
-    public Map<String,Object> memberCheckAuth(
-            @PathVariable("userId") String user_id,
-            @PathVariable("key") String key,
-            @PathVariable("flag") String flag){
-        Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("userId",user_id);
-        paramMap.put("key",key);
-        paramMap.put("flag",flag);
-        Map<String,Object> resultMap =  MemberService.memberCheckAuth(paramMap);
+    public Map<String,Object> memberUpdateAuth(
+            @RequestBody SearchVaildAuthMemberDto
+                    searchVaildAuthMemberDto){
+        Map<String,Object> resultMap =  MemberService.memberUpdateAuth(searchVaildAuthMemberDto);
         return resultMap;
     }
+
 
 }

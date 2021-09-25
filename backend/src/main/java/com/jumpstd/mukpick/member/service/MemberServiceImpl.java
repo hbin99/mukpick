@@ -1,15 +1,19 @@
 package com.jumpstd.mukpick.member.service;
 
+import com.jumpstd.mukpick.config.RollType;
 import com.jumpstd.mukpick.mail.dto.MailDto;
 import com.jumpstd.mukpick.mail.service.MailService;
 import com.jumpstd.mukpick.member.dao.MemberDao;
-import com.jumpstd.mukpick.member.dto.MemberDto;
+import com.jumpstd.mukpick.member.dto.*;
+import com.jumpstd.mukpick.utils.PasswordHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -21,35 +25,35 @@ public class MemberServiceImpl implements MemberService{
     private MailService mailService;
 
     @Override
-    public int checkUserId(MemberDto memberDto){ return memberDao.checkUser(memberDto);}
-
-    //인증코드 난수 생성
-    private String getAuthCode(){
-        Random random = new Random();
-        StringBuffer buffer = new StringBuffer();
-        int num =0 ;
-        while(buffer.length() < 6){
-            num = random.nextInt(10);
-            buffer.append(num);
-        }
-        return buffer.toString();
-    }
+    public int checkUserId(SearchVaildMemberDto searchVaildMemberDto){ return memberDao.checkUser(searchVaildMemberDto);}
 
     @Override
     public Map<String,Object> register(MemberDto memberDto){
+
         Map<String,Object> resultMap = new HashMap<>();
-        // 1 : 시스템관리자
-        // 2 : 일반유저
-        // 3 : 탈퇴유저
-        // 4 : 정지유저
-        // 5 : 회원가입 전단계 (이메일 확인 후 role_type 2로 변경)
-        memberDto.setRoleType('5');//role_type
-        int registerFlag = memberDao.register(memberDto);
-        if(registerFlag == 1){
-            resultMap = memberMailSend(memberDto, "RegisterSend");
-        }else{
-            resultMap.put("RESULT_MSG", "회원가입이 실패되었습니다.\n관리자에게 문의부탁드립니다.");
-            return resultMap;
+        PasswordHash passwordHash= new PasswordHash();
+        String passwordhash = "";
+        try {
+            memberDto.setRoleType(RollType.BEFORE_SING_UP_USER.getValue());//회원가입 전단계
+            passwordhash = passwordHash.getPassword(memberDto.getPassword().toString());
+            memberDto.setPassword(passwordhash);
+
+            int registerFlag = memberDao.register(memberDto);
+            if(registerFlag == 1){
+                SendMailMemberDto sendMailMemberDto = new SendMailMemberDto();
+                sendMailMemberDto.setFlag("RegisterSend");
+                sendMailMemberDto.setUserId(memberDto.getUserId());
+                sendMailMemberDto.setEmail(memberDto.getEmail());
+
+                resultMap = memberMailSend(sendMailMemberDto);
+            }else{
+                resultMap.put("RESULT_MSG", "회원가입이 실패되었습니다.\n관리자에게 문의부탁드립니다.");
+                return resultMap;
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
         }
         return resultMap;
     }
@@ -60,35 +64,37 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Map<String,Object> passwordFind(MemberDto memberDto){
+    public Map<String,Object> passwordFind(SearchVaildMemberDto searchVaildMemberDto){
         Map<String,Object> resultMap = new HashMap<>();
 
-        //1. 회원정보가 존재하는지 유무
-        int userChk = memberDao.checkUser(memberDto);
+        int userChk = memberDao.checkUser(searchVaildMemberDto);
         if(userChk == 1){
-            //존재한다면 임시 비밀번호 전송
-            memberMailSend(memberDto,"PassSend");
-            //2. 회원 임시비밀번호 update
-            int updateChk = memberDao.update(memberDto);
-            if(updateChk == 1){
-                resultMap.put("RESULT_MSG",memberDto.getUserId()+ "님의 임시비밀번호가 발급되었습니다.");
+            SendMailMemberDto sendMailMemberDto = new SendMailMemberDto();
+            sendMailMemberDto.setEmail(searchVaildMemberDto.getEmail());
+            sendMailMemberDto.setFlag("PassSend");
+            sendMailMemberDto.setUserId(searchVaildMemberDto.getUserId());
+
+            Map<String,Object> returnMap= memberMailSend(sendMailMemberDto);
+
+            if(returnMap.get("CODE").equals("S")){
+                resultMap.put("RESULT_MSG",searchVaildMemberDto.getUserId()+ "님께 메일 전송이 완료되었습니다. /n "+ searchVaildMemberDto.getEmail());
             }else{
                 resultMap.put("RESULT_MSG", "실패되었습니다.\n관리자에게 문의부탁드립니다.");
                 return resultMap;
             }
         }else{
-            resultMap.put("RESULT_MSG", memberDto.getUserId()+ "님의 정보가 존재하지 않습니다.");
+            resultMap.put("RESULT_MSG", searchVaildMemberDto.getUserId()+ "님의 정보가 존재하지 않습니다.");
             return resultMap;
         }
         return resultMap;
     }
 
     @Override
-    public Map<String,Object> userIdFind(MemberDto memberDto){
+    public Map<String,Object> userIdFind(SearchUserIdMemberDto searchUserIdMemberDto){
         Map<String,Object> resultMap = new HashMap<>();
-        String userId = memberDao.userIdFind(memberDto);
-        if(userId != null  ){
-            resultMap.put("RESULT_MSG",memberDto.getUserId());
+        String userId = memberDao.userIdFind(searchUserIdMemberDto);
+        if( userId != null  ){
+            resultMap.put("RESULT_MSG","회원님의 아이디는 " + userId+ "입니다.");
         }else{
             resultMap.put("RESULT_MSG", "[먹픽]에 없는 먹찌예요. 회원가입을 해주세요.");
             return resultMap;
@@ -97,8 +103,15 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Map<String,Object> memberOutSend(MemberDto memberDto){
-        Map<String,Object> resultMap = memberMailSend(memberDto,"OutSend");
+    public Map<String,Object> dropByUserMail(String userId){
+        //회원에 대한 정보를 조회하고
+        MemberDto memberDto = memberDao.findByUserData(userId);
+        //정보를 가지고 메일 전송
+        SendMailMemberDto sendMailMemberDto = new SendMailMemberDto();
+        sendMailMemberDto.setEmail(memberDto.getEmail());
+        sendMailMemberDto.setFlag("OutSend");
+        sendMailMemberDto.setUserId(memberDto.getUserId());
+        Map<String,Object> resultMap = memberMailSend(sendMailMemberDto);
 
         if(resultMap.get("CODE") == "S"){
             resultMap.put("RESULT_MSG",memberDto.getUserId()+ "님의 회원탈퇴 관련 메일을 보냈습니다. ");
@@ -108,83 +121,90 @@ public class MemberServiceImpl implements MemberService{
         return resultMap;
     }
 
-    @Override
-    public Map<String,Object> memberOut(MemberDto memberDto){
-        Map<String,Object> resultMap = new HashMap<>();
-        //1. 회원의 비밀번호가 동일한지 조회
-        int userChk = memberDao.checkUser(memberDto);
-        if(userChk == 1){
-            memberDto.setRoleType('3');
-            //탈퇴
-            int updateUSerRole = memberDao.update(memberDto);
-
-            if(updateUSerRole == 1){
-                resultMap.put("RESULT_MSG",memberDto.getUserId()+ "님의 회원탈퇴를 성공적으로 처리했습니다. ");
-            }else{
-                resultMap.put("RESULT_MSG", memberDto.getUserId()+ "님의 회원탈퇴 처리가 실패되었습니다.\n관리자에게 문의부탁드립니다.");
-            }
-        }else{
-            resultMap.put("RESULT_MSG", memberDto.getUserId()+ "님의 비밀번호가 맞지 않습니다.");
-            return resultMap;
-        }
-        return resultMap;
-    }
-
-    public Map<String,Object> memberMailSend(MemberDto memberDto, String mailFlag){
+    public Map<String,Object> memberMailSend(SendMailMemberDto sendMailMemberDto){
         Map<String,Object> resultMap = new HashMap<>();
         MailDto mailDto = new MailDto();
-        mailDto.setAddress(memberDto.getEmail());
-        //임시비밀번호 발급 메일
-        if(mailFlag.equals("PassSend")){
-            mailDto.setTitle("[먹픽] 임시비밀번호 발급 메일입니다.");
-            StringBuffer context = new StringBuffer();
-            context.append("안녕하세요. 회원님께서 요청하신 임시 비밀번호를 알려드립니다. \n");
-            context.append("회원님의 임시 비밀번호는 ");
-            context.append(getAuthCode());
-            context.append("입니다.\n");
-            mailDto.setContext(context.toString());
-        }else if(mailFlag.equals("OutSend")){ //회원탈퇴 확인 메일
-            mailDto.setTitle("[먹픽] 회원탈퇴를 위한 확인 메일입니다.");
-            StringBuffer context = new StringBuffer();
-            context.append("안녕하세요. 회원님께서 요청하신 회원탈퇴를 위한 확인메일입니다.\n");
-            context.append("아래 링크에 접속하셔서 회원님의 비밀번호를 입력해주세요.\n");
-            context.append("비밀번호 입력 성공시 회원탈퇴가 성공적으로 처리 됩니다.\n");
-            context.append("그동안 [먹픽]을 이용해주셔서 감사합니다. 더 나은 [먹픽]이 되도록 노력하겠습니다.\n ");
-            mailDto.setContext(context.toString());
-        }else if(mailFlag.equals("RegisterSend")){//회원가입 후 메일 전송
-            mailDto.setTitle("[먹픽] 회원가입를 위한 확인 메일입니다.");
-            StringBuffer context = new StringBuffer();
-            context.append("안녕하세요. 회원님 가입해주셔서 감사합니다. \n");
-            context.append("아래 링크에 접속하시면 회원가입이 완료됩니다. \n");
-            mailDto.setContext(context.toString());
+        mailDto.setAddress(sendMailMemberDto.getEmail());
+        MemberDto memberDto = new MemberDto();
+        StringBuffer context = new StringBuffer();
+        PasswordHash passwordHash= new PasswordHash();
+        try {
+            //임시비밀번호 발급 메일
+
+            String authKey = passwordHash.passSplice(sendMailMemberDto.getUserId());
+            if(sendMailMemberDto.getFlag().equals("PassSend")){
+
+                mailDto.setTitle("[먹픽] 비밀번호 변경을 위한 확인 메일입니다.");
+                context.append("안녕하세요. 회원님께서 요청하신 비밀번호 변경을 위한 확인메일입니다.</br>");
+                context.append("아래 링크에 접속하셔서 회원님의 비밀번호를 변경해주세요</br>");
+                //비밀번호 입력 페이지로 이등하게끔 수정필요
+                context.append("<h1>비밀번호 변경 </h1> \n");
+                context.append("<a href='http://localhost/member?flag=" + sendMailMemberDto.getFlag() +"&key="+authKey +"&userId="+memberDto.getUserId());
+                context.append("' target='_blenk'>비밀번호 변경 이동</a></br>");
+
+                mailDto.setContext(context.toString());
+            }else if(sendMailMemberDto.getFlag().equals("OutSend")){ //회원탈퇴 확인 메일
+                mailDto.setTitle("[먹픽] 회원탈퇴를 위한 확인 메일입니다.");
+                context.append("안녕하세요. 회원님께서 요청하신 회원탈퇴를 위한 확인메일입니다.</br>");
+                context.append("아래 링크에 접속하시면 회원탈퇴가 성공적으로 처리 됩니다.</br>");
+                context.append("그동안 [먹픽]을 이용해주셔서 감사합니다. 더 나은 [먹픽]이 되도록 노력하겠습니다.</br> ");
+                context.append("<h1>메일인증</h1> \n");
+                context.append("<a href='http://localhost/member?flag=" + sendMailMemberDto.getFlag() +"&key="+authKey +"&userId="+memberDto.getUserId());
+                context.append("' target='_blenk'>이메일 인증 확인</a></br>");
+                mailDto.setContext(context.toString());
+
+            }else if(sendMailMemberDto.getFlag().equals("RegisterSend")){//회원가입 후 메일 전송
+                mailDto.setTitle("[먹픽] 회원가입를 위한 확인 메일입니다.");
+                context.append("<h2><span style = 'color:darkcyan'>메일인증</span> 안내입니다.</h2></br>");
+                context.append("안녕하세요. [먹픽]을 이용해주셔서 진심으로 감사합니다.</br>");
+                context.append("회원님,아래 메일 인증 링크에 클릭하여 회원가입을 완료해주세요.</br>");
+                context.append("<a href='http://localhost/member?flag=" + sendMailMemberDto.getFlag() +"&key="+authKey +"&userId="+memberDto.getUserId());
+                context.append("' target='_blenk'>이메일 인증 확인</a></br>");
+                mailDto.setContext(context.toString());
+            }
+            memberDto.setUserId(sendMailMemberDto.getUserId());
+            memberDto.setAuthKey(authKey);
+            memberDao.update(memberDto);
+            resultMap = mailService.mailSend(mailDto);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
         }
-        resultMap = mailService.mailSend(mailDto);
         return resultMap;
     }
     @Override
-    public Map<String,Object> memberCheckAuth(Map<String,Object> paramMap){
+    public Map<String,Object> memberUpdateAuth(SearchVaildAuthMemberDto searchVaildAuthMemberDto){
         Map<String,Object> resultMap = new HashMap<>();
-        String flag = paramMap.get("flag").toString();
-        //인증키를 db에 저장
         MemberDto memberDto = new MemberDto();
-        memberDto.setUserId(paramMap.get("userId").toString());
-        int userChk = memberDao.userAuthCheck(paramMap);
-        if(flag.equals("join")){//회원가입
-            if(userChk == 1){//회원존재
-                memberDto.setRoleType('2');
-                int updateUSerRole = memberDao.update(memberDto);
-            }else{
-                //실패
-            }
-        }else if(flag.equals("out")){//탈퇴
-            if(userChk == 1){//회원존재
-                memberDto.setRoleType('3');
-                int updateUSerRole = memberDao.update(memberDto);
-            }else{
-                //실패
-            }
-        }
+        int userChk = memberDao.userAuthCheck(searchVaildAuthMemberDto);
 
+        if(searchVaildAuthMemberDto.getFlag().equals("RegisterSend")){//회원가입
+            if(userChk == 1){//회원존재
+                memberDto.setUserId(searchVaildAuthMemberDto.getUserId());
+                memberDto.setRoleType(RollType.USER.getValue());
+                memberDto.setAuthKey("");
+                memberDao.update(memberDto);
+            }else{
+                //실패
+            }
+        }else if(searchVaildAuthMemberDto.getFlag().equals("OutSend")){//탈퇴
+            if(userChk == 1){//회원존재
+                memberDto.setUserId(searchVaildAuthMemberDto.getUserId());
+                memberDto.setRoleType(RollType.DROP_USER.getValue());
+                memberDto.setAuthKey("");
+                memberDao.update(memberDto);
+            }else{
+                //실패
+            }
+        }else{//비밀번호 찾기
+            memberDto.setAuthKey("");
+            memberDto.setUserId(searchVaildAuthMemberDto.getUserId());
+            memberDao.update(memberDto);
+
+        }
         return resultMap;
     }
 

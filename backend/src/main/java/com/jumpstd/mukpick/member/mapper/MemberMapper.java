@@ -1,6 +1,9 @@
 package com.jumpstd.mukpick.member.mapper;
 
 import com.jumpstd.mukpick.member.dto.MemberDto;
+import com.jumpstd.mukpick.member.dto.SearchUserIdMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto;
+import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,17 +15,14 @@ import java.util.Map;
 public interface MemberMapper {
     public List<MemberDto> userList(MemberDto memberDto);
 
-    public int checkUser(MemberDto memberDto);
+    public int checkUser(SearchVaildMemberDto searchVaildMemberDto);
 
     public int register(MemberDto memberDto);
 
     public int update(MemberDto memberDto);
+    public String userIdFind(SearchUserIdMemberDto searchUserIdMemberDto);
 
-    public int passwordReset(MemberDto memberDto);
+    public int userAuthCheck(SearchVaildAuthMemberDto searchVaildAuthMemberDto);
 
-    public String userIdFind(MemberDto memberDto);
-
-    public int updateUSerRole(MemberDto memberDto);
-
-    public int userAuthCheck(Map<String,Object> paramMap);
+    public MemberDto findByUserData(String userId);
 }
