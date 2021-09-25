@@ -58,4 +58,13 @@
         SET VALID_DATE = #{changeDate}
         WHERE SEARCH_NO =#{searchNo}
     </update>
+    <insert id="transferToFood" parameterType="Long">
+        INSERT INTO TB_FOOD (
+         FOOD_NO
+        , FOOD_NAME
+        ) VALUES(
+        SEQ_FOOD_NO.NEXTVAL
+        , (SELECT SEARCH_TEXT FROM TB_SEARCH_MNT WHERE SEARCH_NO = #{SEARCH_NO})
+         )
+    </insert>
 </mapper>

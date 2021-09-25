@@ -1,17 +1,15 @@
 package com.jumpstd.mukpick.admin.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-
-@Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 @ToString
-public class SearchValidDateRequestDto {
-    Long searchNo;
+@Getter
+public class RequestDateDto {
     @DateTimeFormat(pattern="yyyyMMddHHmmss")
-    Date ChangeDate;
+    private Date date;
 }

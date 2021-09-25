@@ -104,4 +104,16 @@ class SearchMntServiceTest {
         SearchResponseDto resultData = searchMntService.findBySearchText(searchText);
         assertThat(resultData.getValidDate()).isEqualTo(date);
     }
+
+    @Test
+    public void transferToFood() throws Exception {
+        // given
+        String text = "라볶이";
+        SearchResponseDto searchData = searchMntService.findBySearchText(text);
+        Long searchNo = searchData.getSearchNo();
+        // when
+        int i = searchMntService.transferToFood(searchNo);
+        // then
+        assertThat(i).isEqualTo(1);
+    }
 }

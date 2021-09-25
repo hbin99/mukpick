@@ -22,4 +22,6 @@ public interface SearchMntDao {
     int saveOne(String searchText);
 
     int changeValidDate(SearchValidDateRequestDto dto);
+
+    int transferToFood(Long searchNo);
 }

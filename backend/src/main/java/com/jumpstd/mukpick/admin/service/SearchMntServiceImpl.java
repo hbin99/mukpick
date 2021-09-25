@@ -71,4 +71,15 @@ public class SearchMntServiceImpl implements SearchMntService{
         return searchData.getSearchMntDto();
 
     }
+
+    @Override
+    public int transferToFood(Long searchNo) {
+        SearchMntDomain searchData = searchMntDao.findBySearchNo(searchNo);
+        if(searchData != null){
+            int flag = searchMntDao.transferToFood(searchNo);
+            searchMntDao.deleteOne(searchNo);
+            return flag;
+        }
+        return 0;
+    }
 }
