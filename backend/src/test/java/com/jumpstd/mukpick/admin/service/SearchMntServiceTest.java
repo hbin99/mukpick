@@ -44,7 +44,7 @@ class SearchMntServiceTest {
         List<SearchResponseDto> searchList = searchMntService.findSearchList(dto);
 
         // then
-        assertThat(searchList.size()).isGreaterThan(2);
+        assertThat(searchList.size()).isGreaterThanOrEqualTo(2);
     }
 
     @Test

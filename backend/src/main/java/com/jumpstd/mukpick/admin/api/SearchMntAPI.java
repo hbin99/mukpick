@@ -1,5 +1,4 @@
 package com.jumpstd.mukpick.admin.api;
-
 import com.jumpstd.mukpick.admin.dto.RequestDateDto;
 import com.jumpstd.mukpick.admin.dto.SearchRequestDto;
 import com.jumpstd.mukpick.admin.dto.SearchResponseDto;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @Slf4j
 @RequestMapping("/api/admin/search")
 @RestController
