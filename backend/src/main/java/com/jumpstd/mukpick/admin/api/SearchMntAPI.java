@@ -6,6 +6,7 @@ import com.jumpstd.mukpick.admin.dto.SearchValidDateRequestDto;
 import com.jumpstd.mukpick.admin.service.SearchMntService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class SearchMntAPI {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<SearchResponseDto>> saerchAllList(SearchRequestDto request){
+    public ResponseEntity<List<SearchResponseDto>> searchAllList(SearchRequestDto request){
         List<SearchResponseDto> responses = searchMntService.findSearchList(request);
 
         return ResponseEntity.ok(responses);
@@ -65,7 +66,17 @@ public class SearchMntAPI {
      */
     @PostMapping("/{searchNo}")
     public ResponseEntity transferToFood(@PathVariable Long searchNo){
-        int flag = searchMntService.transferToFood(searchNo);
-        return ResponseEntity.ok(flag);
+        searchMntService.transferToFood(searchNo);
+        return ResponseEntity.ok(searchNo);
+    }
+
+    @DeleteMapping("/{searchNo}")
+    public ResponseEntity deleteSearchText(@PathVariable Long searchNo){
+        try{
+            searchMntService.deleteSearchText(searchNo);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(searchNo);
     }
 }

@@ -32,6 +32,12 @@ class SearchMntServiceTest {
 
         String text2 = "마라탕";
         searchMntService.saveSearchText(text2);
+
+        String text3 = "삼계탕";
+        searchMntService.saveSearchText(text3);
+
+        String text4 = "피자";
+        searchMntService.saveSearchText(text4);
     }
 
     @Test

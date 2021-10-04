@@ -13,9 +13,7 @@ import java.util.Date;
 public class SearchResponseDto {
     private Long searchNo;
     private String searchText;
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Date validDate;
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Date registerDate;
     private Long searchCnt;
 

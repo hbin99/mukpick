@@ -1,10 +1,16 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
-import { changeSearchCond, searchMntList } from '../../modules/admin/searchMnt';
+import {
+  changeSearchCond,
+  changeSearchValidDate,
+  deleteSearchText,
+  searchMntList,
+  transferToFoodMnt,
+} from '../../modules/admin/searchMnt';
 import { withRouter, useHistory } from 'react-router-dom';
-import SearchMnt from '../../components/admin/SearchMnt';
-import SearchBar from '../../components/admin/SearchBar';
+import SearchMnt from '../../components/admin/search_mnt/SearchMnt';
+import SearchBar from '../../components/admin/search_mnt/SearchBar';
 const SearchMntContainer = ({ location }) => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -32,6 +38,23 @@ const SearchMntContainer = ({ location }) => {
     }
   };
 
+  const deleteItem = (searchNo) => {
+    dispatch(deleteSearchText({ searchNo }));
+  };
+
+  const changeValidDate = (searchNo, changeDate) => {
+    dispatch(changeSearchValidDate({ searchNo, changeDate }));
+  };
+
+  const transferSearchText = (searchNo) => {
+    dispatch(transferToFoodMnt({ searchNo }));
+  };
+
+  /* 새로고침 시 쿼리스트링 초기화 */
+  useEffect(() => {
+    history.push('/admin/search-mnt');
+  }, [history]);
+
   useEffect(() => {
     const { q, sort } = qs.parse(location.search, {
       ignoreQueryPrefix: true,
@@ -45,6 +68,9 @@ const SearchMntContainer = ({ location }) => {
         loading={loading}
         error={error}
         searchTextList={searchTextList}
+        deleteSearchText={deleteItem}
+        changeValidDate={changeValidDate}
+        transferSearchText={transferSearchText}
         searchBar={
           <SearchBar
             searchText={searchText}
