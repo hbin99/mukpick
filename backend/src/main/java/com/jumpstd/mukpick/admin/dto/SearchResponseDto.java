@@ -1,5 +1,6 @@
 package com.jumpstd.mukpick.admin.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
