@@ -87,7 +87,7 @@
     <select id="userAuthCheck" resultType="int" parameterType="com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto">
         SELECT COUNT(USER_ID)
         FROM TB_USER
-        WHERE AUTHKEY = #{key}
+        WHERE AUTH_KEY = #{key}
         AND USER_ID = #{userId}
     </select>
 

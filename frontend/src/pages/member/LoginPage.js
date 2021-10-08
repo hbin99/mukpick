@@ -1,5 +1,15 @@
+import HeaderContainer from "../../containers/common/HeaderContainer";
+import LoginPageContainer from "../../containers/login/LoginPageContainer";
+
 const LoginPage = () => {
-    return <>로그인 페이지</>
+    return(
+        <>
+            <HeaderContainer />
+            <LoginPageContainer/>
+        </>
+
+    );
+
 }
 
 export default LoginPage;

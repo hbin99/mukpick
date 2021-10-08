@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 @RestController
-@RequestMapping("/member/**")
+@RequestMapping("/api/member/**")
 @Slf4j
 public class MemberAPI {
 
@@ -42,11 +42,13 @@ public class MemberAPI {
         searchVaildMemberDto.setUserId(user_id);
         int resultFlag = MemberService.checkUserId(searchVaildMemberDto);
         Map<String,Object> resultMap = new HashMap<String,Object>();
+
         if(resultFlag == 1){
             resultMap.put("RESULT_MSG", "이미 사용중이거나 탈퇴한 아이디입니다.");
         }else{
             resultMap.put("RESULT_MSG", "멋진 아이디네요!");
         }
+
         resultMap.put("RESULT_FLAG", resultFlag );
         return resultMap;
     }
@@ -124,10 +126,17 @@ public class MemberAPI {
      * 회원가입 완료 (로그인 가능)
      * @return
      */
-    @GetMapping("/member/{flag}/{key}/{userId}")
+    @GetMapping("/{flag}/{key}/{userId}")
     public Map<String,Object> memberUpdateAuth(
-            @RequestBody SearchVaildAuthMemberDto
-                    searchVaildAuthMemberDto){
+            @PathVariable("flag") String flag,
+            @PathVariable("key") String key,
+            @PathVariable("userId") String user_id
+            ){
+        SearchVaildAuthMemberDto searchVaildAuthMemberDto = new SearchVaildAuthMemberDto();
+        searchVaildAuthMemberDto.setFlag(flag);
+        searchVaildAuthMemberDto.setKey(key);
+        searchVaildAuthMemberDto.setUserId(user_id);
+
         Map<String,Object> resultMap =  MemberService.memberUpdateAuth(searchVaildAuthMemberDto);
         return resultMap;
     }

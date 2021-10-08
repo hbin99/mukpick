@@ -73,6 +73,7 @@ const SearchMntContainer = ({ location }) => {
         transferSearchText={transferSearchText}
         searchBar={
           <SearchBar
+            name={'searchText'}
             searchText={searchText}
             onChange={onChange}
             onKeyDown={onKeyDown}
