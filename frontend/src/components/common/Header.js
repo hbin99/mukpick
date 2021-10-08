@@ -48,6 +48,7 @@ const UserHeader = () => {
           </Link>
           <div className="right">
             <Button to="/login">로그인</Button>
+            <Button to="/register">회원가입</Button>
             <Button to="/admin">관리자 모드</Button>
           </div>
         </Wrapper>

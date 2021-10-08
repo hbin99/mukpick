@@ -129,9 +129,11 @@ public class MemberServiceImpl implements MemberService{
         StringBuffer context = new StringBuffer();
         PasswordHash passwordHash= new PasswordHash();
         try {
-            //임시비밀번호 발급 메일
-
+            // 코드 발급 메일
             String authKey = passwordHash.passSplice(sendMailMemberDto.getUserId());
+            memberDto.setUserId(sendMailMemberDto.getUserId());
+            memberDto.setAuthKey(authKey);
+            memberDao.update(memberDto);
             if(sendMailMemberDto.getFlag().equals("PassSend")){
 
                 mailDto.setTitle("[먹픽] 비밀번호 변경을 위한 확인 메일입니다.");
@@ -139,7 +141,7 @@ public class MemberServiceImpl implements MemberService{
                 context.append("아래 링크에 접속하셔서 회원님의 비밀번호를 변경해주세요</br>");
                 //비밀번호 입력 페이지로 이등하게끔 수정필요
                 context.append("<h1>비밀번호 변경 </h1> \n");
-                context.append("<a href='http://localhost/member?flag=" + sendMailMemberDto.getFlag() +"&key="+authKey +"&userId="+memberDto.getUserId());
+                context.append("<a href='http://localhost/member/"+ sendMailMemberDto.getFlag() +"/"+authKey +"/"+memberDto.getUserId());
                 context.append("' target='_blenk'>비밀번호 변경 이동</a></br>");
 
                 mailDto.setContext(context.toString());
@@ -148,23 +150,21 @@ public class MemberServiceImpl implements MemberService{
                 context.append("안녕하세요. 회원님께서 요청하신 회원탈퇴를 위한 확인메일입니다.</br>");
                 context.append("아래 링크에 접속하시면 회원탈퇴가 성공적으로 처리 됩니다.</br>");
                 context.append("그동안 [먹픽]을 이용해주셔서 감사합니다. 더 나은 [먹픽]이 되도록 노력하겠습니다.</br> ");
-                context.append("<h1>메일인증</h1> \n");
-                context.append("<a href='http://localhost/member?flag=" + sendMailMemberDto.getFlag() +"&key="+authKey +"&userId="+memberDto.getUserId());
+                context.append("<h1>메일인증</h1>");
+                context.append("<a href='http://localhost/member/"+ sendMailMemberDto.getFlag() +"/"+authKey +"/"+memberDto.getUserId());
                 context.append("' target='_blenk'>이메일 인증 확인</a></br>");
                 mailDto.setContext(context.toString());
 
             }else if(sendMailMemberDto.getFlag().equals("RegisterSend")){//회원가입 후 메일 전송
                 mailDto.setTitle("[먹픽] 회원가입를 위한 확인 메일입니다.");
-                context.append("<h2><span style = 'color:darkcyan'>메일인증</span> 안내입니다.</h2></br>");
-                context.append("안녕하세요. [먹픽]을 이용해주셔서 진심으로 감사합니다.</br>");
-                context.append("회원님,아래 메일 인증 링크에 클릭하여 회원가입을 완료해주세요.</br>");
-                context.append("<a href='http://localhost/member?flag=" + sendMailMemberDto.getFlag() +"&key="+authKey +"&userId="+memberDto.getUserId());
-                context.append("' target='_blenk'>이메일 인증 확인</a></br>");
+                context.append("<h2><span style = 'color:darkcyan'>메일인증</span> 안내입니다.</h2><br/>");
+                context.append("안녕하세요. [먹픽]을 이용해주셔서 진심으로 감사합니다.<br/>");
+                context.append("회원님,아래 메일 인증 링크에 클릭하여 회원가입을 완료해주세요.<br/>");
+                context.append("<a href='http://localhost/member/"+ sendMailMemberDto.getFlag() +"/"+authKey +"/"+memberDto.getUserId());
+                context.append("' target='_blenk'>이메일 인증 확인</a><br/>");
                 mailDto.setContext(context.toString());
             }
-            memberDto.setUserId(sendMailMemberDto.getUserId());
-            memberDto.setAuthKey(authKey);
-            memberDao.update(memberDto);
+
             resultMap = mailService.mailSend(mailDto);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -181,7 +181,7 @@ public class MemberServiceImpl implements MemberService{
         MemberDto memberDto = new MemberDto();
         int userChk = memberDao.userAuthCheck(searchVaildAuthMemberDto);
 
-        if(searchVaildAuthMemberDto.getFlag().equals("RegisterSend")){//회원가입
+        if("RegisterSend".equals(searchVaildAuthMemberDto.getFlag())){//회원가입
             if(userChk == 1){//회원존재
                 memberDto.setUserId(searchVaildAuthMemberDto.getUserId());
                 memberDto.setRoleType(RollType.USER.getValue());
@@ -190,7 +190,7 @@ public class MemberServiceImpl implements MemberService{
             }else{
                 //실패
             }
-        }else if(searchVaildAuthMemberDto.getFlag().equals("OutSend")){//탈퇴
+        }else if("OutSend".equals(searchVaildAuthMemberDto.getFlag())  ){//탈퇴
             if(userChk == 1){//회원존재
                 memberDto.setUserId(searchVaildAuthMemberDto.getUserId());
                 memberDto.setRoleType(RollType.DROP_USER.getValue());
