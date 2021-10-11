@@ -30,7 +30,7 @@
              , SEARCH_CNT
         FROM TB_SEARCH_MNT
         WHERE 1=1
-        <if test="searchText!=null">
+        <if test="searchText!=null and searchText!=''">
             AND SEARCH_TEXT LIKE '%' || #{searchText} || '%'
         </if>
         <if test="end != 0">

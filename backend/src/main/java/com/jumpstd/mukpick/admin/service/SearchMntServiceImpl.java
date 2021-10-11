@@ -63,9 +63,9 @@ public class SearchMntServiceImpl implements SearchMntService{
 
     @Override
     public SearchResponseDto changeValidDate(SearchValidDateRequestDto dto) {
-        searchMntDao.changeValidDate(dto);
+        int successFlag = searchMntDao.changeValidDate(dto);
         SearchMntDomain searchData = searchMntDao.findBySearchNo(dto.getSearchNo());
-        if(searchData == null){
+        if(successFlag == 0 || searchData == null){
             return null;
         }
         return searchData.getSearchMntDto();

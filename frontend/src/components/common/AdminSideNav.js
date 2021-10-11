@@ -43,6 +43,7 @@ const AdminSideNav = () => {
         </HomeBtn>
         <SideButton to="/admin">관리자 메인</SideButton>
         <SideButton to="/admin/search-mnt">검색 관리</SideButton>
+        <SideButton to="/admin/food-mnt">음식 관리</SideButton>
         <SideButton to="/">사용자 모드로 이동</SideButton>
       </SideBarBlock>
     </>
