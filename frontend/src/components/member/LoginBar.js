@@ -17,7 +17,7 @@ const LoginBar = () => {
         <Input placeholder='비밀번호' />
         <Button>로그인</Button>
         <Button to="/find-id">아이디찾기</Button>
-        <Button>비밀번호 찾기</Button>
+        <Button to="/find-password">비밀번호 찾기</Button>
     </>
   );
 };

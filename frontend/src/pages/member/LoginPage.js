@@ -4,7 +4,7 @@ import LoginPageContainer from "../../containers/login/LoginPageContainer";
 const LoginPage = () => {
     return(
         <>
-            <HeaderContainer />
+            <HeaderContainer/>
             <LoginPageContainer/>
         </>
 

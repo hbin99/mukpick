@@ -5,7 +5,6 @@ const LoginPageContainer = () => {
   return (
     <>
           <LoginBar/>
-
     </>
   );
 };
