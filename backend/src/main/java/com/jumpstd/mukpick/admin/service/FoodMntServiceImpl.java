@@ -40,14 +40,14 @@ public class FoodMntServiceImpl implements FoodMntService{
 
     @Override
     public FoodResponseDto modifyFoodInfo(FoodUpdateRequestDto fudto) {
+        if(fudto.getIsShow() != 'Y' && fudto.getIsShow() != 'N') return null;
         int successFlag = foodMntDao.updateFoodInfo(fudto);
 
-        if(successFlag == 1){
-            FoodMntDomain foodInfo = foodMntDao.findByFoodNo(fudto.getFoodNo());
-            return foodInfo.getFoodMntDto();
+        if(successFlag == 0){
+            return null;
         }
-
-        return null;
+        FoodMntDomain foodInfo = foodMntDao.findByFoodNo(fudto.getFoodNo());
+        return foodInfo.getFoodMntDto();
     }
 
     @Override

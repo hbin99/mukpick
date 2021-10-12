@@ -90,7 +90,7 @@ class FoodMntServiceImplTest {
 
         FoodResponseDto findFoodInfo = resultList.get(0);
         FoodUpdateRequestDto foodUpdateRequestDto = new FoodUpdateRequestDto();
-        foodUpdateRequestDto.setFoodNo(findFoodInfo.getFoodNo());
+        foodUpdateRequestDto.setUpFoodNo(findFoodInfo.getFoodNo());
         foodUpdateRequestDto.setFoodName("탕수육");
         // when
         FoodResponseDto resultFoodInfo = foodMntService.modifyFoodInfo(foodUpdateRequestDto);
@@ -110,7 +110,7 @@ class FoodMntServiceImplTest {
 
         FoodResponseDto findFoodInfo = findList.get(0);
         FoodUpdateRequestDto foodUpdateRequestDto = new FoodUpdateRequestDto();
-        foodUpdateRequestDto.setFoodNo(findFoodInfo.getFoodNo());
+        foodUpdateRequestDto.setUpFoodNo(findFoodInfo.getFoodNo());
         foodUpdateRequestDto.setIsShow('N');
 
         // when

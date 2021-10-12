@@ -8,7 +8,6 @@ import lombok.ToString;
 
 
 @Getter
-@Setter
 @RequiredArgsConstructor
 @ToString
 public class FoodUpdateRequestDto {
@@ -16,6 +15,17 @@ public class FoodUpdateRequestDto {
     private String foodName;
     private char isShow;
 
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
+    public void setIsShow(char isShow) {
+        this.isShow = isShow;
+    }
+
+    public void setUpFoodNo(Long foodNo){
+        this.foodNo = foodNo;
+    }
 }
 
 
