@@ -4,7 +4,7 @@ import HeaderContainer from "../../containers/common/HeaderContainer";
 const FindIdPage = () => {
     return (
         <>
-            <HeaderContainer />
+            <HeaderContainer/>
             <FindIdPageContainer/>
         </>
       );
