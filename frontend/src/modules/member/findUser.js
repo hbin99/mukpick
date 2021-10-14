@@ -6,15 +6,18 @@ import createRequestSaga, {
 import { takeLatest } from 'redux-saga/effects';
 import produce from "immer";
 
-const CHANGE_FIELD ='findId/CHANGE_FIELD';
-const INITIALIZE_FORM ='findId/INITIALIZE_FORM';
+const CHANGE_FIELD ='member/CHANGE_FIELD';
+const INITIALIZE_FORM ='member/INITIALIZE_FORM';
+
 
 const [FIND_ID, FIND_ID_SUCCESS, FIND_ID_FAILURE] =
     createRequestActionTypes('/member/findId');
-
+const [FIND_PASSWORD, FIND_PASSWORD_SUCCESS, FIND_PASSWORD_FAILURE] =
+    createRequestActionTypes('/member/findPassword');
 const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] =
     createRequestActionTypes('/member/register');
-
+const [CHECK_ID, CHECK_ID_SUCCESS, CHECK_ID_FAILURE] =
+    createRequestActionTypes('/member/checkId');
 export const chengeField = createAction(
     CHANGE_FIELD,
     ({ form, key, value}) => ({
@@ -23,17 +26,15 @@ export const chengeField = createAction(
         value //실제 바꾸려는 값
     }),
 );
-/*export const findId = createAction(
-    FIND_ID,
-    ({ form, key, value}) => ({
-        form,
-        key, // 컴포넌트
-        value //실제 바꾸려는 값
-    }),
-);*/
+
 export const initializeForm = createAction(INITIALIZE_FORM, form => form);
 export const findId = createAction(FIND_ID, ({ userName, phone, email }) =>({
     userName,
+    phone,
+    email
+}));
+export const findPassword = createAction(FIND_PASSWORD, ({ userId, phone, email }) =>({
+    userId,
     phone,
     email
 }));
@@ -47,8 +48,10 @@ export const registerData = createAction(REGISTER,
         phone,
         gender,
         age
-
     }));
+export const checkId = createAction(CHECK_ID, ({ userId }) =>({
+    userId
+}));
 const initialState = {
     register: {
         userId: '',
@@ -65,6 +68,11 @@ const initialState = {
         userName: '',
         phone: '',
     },
+    findPassword: {
+        email: '',
+        userId: '',
+        phone: '',
+    },
     resultMsg: null,
     error: null
 };
@@ -74,15 +82,26 @@ const findIdSaga = createRequestSaga(
   FIND_ID,
   memberAPI.getFindId,
 );
-export function* memberSaga() {
-  yield takeLatest(FIND_ID, findIdSaga);
-  yield takeLatest(REGISTER, registerSaga);
-}
-//사가 생성
+
+const findPasswordSaga = createRequestSaga(
+    FIND_PASSWORD,
+    memberAPI.getFindPassword,
+);
 const registerSaga = createRequestSaga(
     REGISTER,
     memberAPI.register,
 );
+const checkIdSaga = createRequestSaga(
+    CHECK_ID,
+    memberAPI.getCheckId,
+);
+export function* memberSaga() {
+  yield takeLatest(FIND_ID, findIdSaga);
+  yield takeLatest(FIND_PASSWORD, findPasswordSaga);
+  yield takeLatest(REGISTER, registerSaga);
+  yield takeLatest(CHECK_ID, checkIdSaga);
+}
+
 
 const member = handleActions(
 {
@@ -104,12 +123,30 @@ const member = handleActions(
             ...state,
             error : error,
         }),
+        [FIND_PASSWORD_SUCCESS]: (state, { payload: resultMsg }) => ({
+            ...state,
+            error :null ,
+            resultMsg
+        }),
+        [FIND_PASSWORD_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            error : error,
+        }),
         [REGISTER_SUCCESS]: (state, { payload: resultMsg }) => ({
             ...state,
             error :null ,
             resultMsg
         }),
         [REGISTER_FAILURE]: (state, { payload: error }) => ({
+            ...state,
+            error : error,
+        }),
+        [CHECK_ID_SUCCESS]: (state, { payload: resultMsg }) => ({
+            ...state,
+            error :null ,
+            resultMsg
+        }),
+        [CHECK_ID_FAILURE]: (state, { payload: error }) => ({
             ...state,
             error : error,
         }),

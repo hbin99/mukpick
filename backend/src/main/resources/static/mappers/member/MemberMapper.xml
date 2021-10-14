@@ -16,10 +16,10 @@
             COUNT(*)
         FROM TB_USER
         WHERE USER_ID = #{userId}
-        <if test='email != "" and email != null '>
+        <if test='email != null '>
             AND EMAIL = #{email}
         </if>
-        <if test='password != "" and password != null '>
+        <if test=' password != null '>
             AND PASSWORD = #{password}
         </if>
     </select>

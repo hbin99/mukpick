@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import loading from './loading';
-import findId, { memberSaga } from './member/findId';
+import findId, { memberSaga } from './member/findUser';
 import searchMnt, {
   searchMntSaga,
   deleteSearchTextSaga,

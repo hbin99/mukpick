@@ -42,14 +42,13 @@ public class MemberAPI {
         searchVaildMemberDto.setUserId(user_id);
         int resultFlag = MemberService.checkUserId(searchVaildMemberDto);
         Map<String,Object> resultMap = new HashMap<String,Object>();
-
         if(resultFlag == 1){
             resultMap.put("RESULT_MSG", "이미 사용중이거나 탈퇴한 아이디입니다.");
         }else{
             resultMap.put("RESULT_MSG", "멋진 아이디네요!");
         }
-
         resultMap.put("RESULT_FLAG", resultFlag );
+        System.out.println(resultMap.toString());
         return resultMap;
     }
 
@@ -72,8 +71,11 @@ public class MemberAPI {
      * @param searchVaildMemberDto
      * @return
      */
+
+
     @PostMapping("/password-find-mail")
     public Map<String,Object>  passwordFind(@RequestBody SearchVaildMemberDto searchVaildMemberDto){
+        System.out.println(searchVaildMemberDto.getUserId());
         Map<String,Object> passwordFind = MemberService.passwordFind(searchVaildMemberDto);
         return passwordFind;
     }
@@ -85,6 +87,7 @@ public class MemberAPI {
      */
     @PostMapping("/user-find")
     public Map<String,Object> userIdFind(@RequestBody SearchUserIdMemberDto searchUserIdMemberDto){
+
         Map<String,Object> userIdFind = MemberService.userIdFind(searchUserIdMemberDto);
         return userIdFind;
     }

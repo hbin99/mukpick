@@ -1,5 +1,14 @@
+import HeaderContainer from "../../containers/common/HeaderContainer";
+import FindUserPageContainer from '../../containers/member/FindUserPageContainer';
+
 const FindPasswordPage = () => {
-    return <>비밀번호 찾기 페이지</>;
+    return (
+        <>
+            <HeaderContainer/>
+            <FindUserPageContainer type = "findPassword"/>
+        </>
+    );
 }
+
 
 export default FindPasswordPage;

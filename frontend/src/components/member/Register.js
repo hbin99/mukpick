@@ -10,6 +10,11 @@ const Input = styled.input`
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 `;
+const ErrorMsg = styled.div`
+    color :red;
+    margin-top : 1rem;
+`
+
 const div =styled.div`
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -20,15 +25,19 @@ const SearchTextItem = ({ item }) => {
     const { RESULT_MSG, RESULT_FLAG } = item;
     return (
         <div>
-            <div>{RESULT_MSG} </div>
-            <div>{RESULT_FLAG} </div>
+            { RESULT_FLAG === 1 ?
+                (
+                    <ErrorMsg>{RESULT_MSG}</ErrorMsg>
+                ):(
+                    <div>{RESULT_MSG} </div>
+                )}
         </div>
     );
 };
 const textMap = {
     register : '회원가입',
 }
-const RegisterForm = ({type, loading,form, resultText , onChange, onCheck , onRegister}) => {
+const RegisterForm = ({type, loading,form, resultText , onChange, onCheck , onClick, onblur,error }) => {
     const text = textMap[type];
     return (
     <>
@@ -40,7 +49,7 @@ const RegisterForm = ({type, loading,form, resultText , onChange, onCheck , onRe
                    onChange={onChange}
                    value={form.userId}
             />
-            <Button> 아이디 중복 확인</Button>
+            <Button onClick ={onCheck}> 중복 확인</Button>
         </div>
         <div>
             <label> 이름 :</label>
@@ -55,6 +64,7 @@ const RegisterForm = ({type, loading,form, resultText , onChange, onCheck , onRe
             <Input placeholder={'비밀번호'}
                    name = "userPassword"
                    onChange={onChange}
+                   type ="password"
                    value={form.userPassword}
             />
         </div>
@@ -63,7 +73,9 @@ const RegisterForm = ({type, loading,form, resultText , onChange, onCheck , onRe
             <Input placeholder={'비밀번호 확인'}
                    name = "userPasswordConfirm"
                    onChange={onChange}
+                   type ="password"
                    value={form.userPasswordConfirm}
+                   onBlur ={onblur}
             />
         </div>
         <div>
@@ -72,6 +84,7 @@ const RegisterForm = ({type, loading,form, resultText , onChange, onCheck , onRe
                    name = "email"
                    onChange={onChange}
                    value={form.email}
+                   onBlur ={onblur}
             />
         </div>
         <div>
@@ -80,27 +93,38 @@ const RegisterForm = ({type, loading,form, resultText , onChange, onCheck , onRe
                    name = "phone"
                    onChange={onChange}
                    value={form.phone}
+                   onBlur ={onblur}
             />
         </div>
         <div>
             <label>성별:</label>
+            <label>남</label>
             <Input placeholder={'성별'}
                    name = "gender"
                    onChange={onChange}
                    value={form.gender}
+                   type ="radio"
+            />
+            <label>여</label>
+            <Input placeholder={'성별'}
+                   name = "gender"
+                   onChange={onChange}
+                   value={form.gender}
+                   type ="radio"
             />
         </div>
         <div>
             <label>나이:</label>
             <Input placeholder={'나이'}
                    name = "age"
+                   type ="number"
                    onChange={onChange}
                    value={form.age}
             />
         </div>
-        <Button onClick={onRegister}>회원가입</Button>
-
-        {!loading && resultText && <SearchTextItem item={resultText} />}
+        <Button onClick={onClick}>회원가입</Button>
+        {error && <ErrorMsg>{error}</ErrorMsg> }
+        {!loading && !error && resultText && <SearchTextItem item={resultText} />}
     </>
   );
 };
