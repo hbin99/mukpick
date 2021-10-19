@@ -6,14 +6,21 @@ const ErrorMsg = styled.div`
     color :red;
     margin-top : 1rem;
 `
+const ResultMsg = styled.div`
+    color :blue;
+    margin-top : 1rem;
+`
 
 const Input = styled.input`
+    width: 30%;
+    border: 1px solid #0333;
     outline: none;
     border-radius: 0px;
     line-height: 2.5rem;
     font-size: 1.2rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+    margin : 5px;
 `;
 const textMap = {
   //  login : '로그인',
@@ -25,14 +32,12 @@ const SearchTextItem = ({ item }) => {
   const { RESULT_MSG, RESULT_FLAG } = item;
   return (
     <div>
-        { RESULT_FLAG === 1 ?
+        { RESULT_FLAG === 'SUCCESS' ?
         (
-            <ErrorMsg>{RESULT_MSG}</ErrorMsg>
+            <ResultMsg>{RESULT_MSG}</ResultMsg>
         ):(
             <div>{RESULT_MSG} </div>
         )}
-      <div>{RESULT_MSG} </div>
-      <div>{RESULT_FLAG} </div>
     </div>
   );
 };

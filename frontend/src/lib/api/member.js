@@ -16,7 +16,7 @@ export const getFindPassword = ({ userId, phone, email }) => {
 };
 export const register =
     ({ userId, userName,userPassword,email,phone,gender,age  }) => {
-    console.log(userId);
+
   return client.post(`/api/member/register`,{
     userId :userId,
     userName :userName,
@@ -30,6 +30,13 @@ export const register =
 export const getCheckId = ({ userId }) => {
   console.log(userId);
   return client.get(`/api/member/register/${userId}`);
+}
+export const login = ({ userId, userPassword }) => {
+  return client.post(`/api/member/login`,
+      {
+        userId : userId,
+        password : userPassword
+      });
 }
 
 

@@ -1,6 +1,7 @@
 package com.jumpstd.mukpick.utils;
 
 import java.security.SecureRandom;
+import javax.crypto.Cipher;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.SecretKeyFactory;
 import java.math.BigInteger;
@@ -18,10 +19,10 @@ public class PasswordHash{
         //System.out.println(passSplice(generatedSecuredPasswordHash));
 
         boolean matched = validatePassword("password", generatedSecuredPasswordHash);
-        System.out.println(matched);
+        //System.out.println(matched);
 
         matched = validatePassword("password1", generatedSecuredPasswordHash);
-        System.out.println(matched);
+        //System.out.println(matched);
     }
 
 
@@ -35,6 +36,12 @@ public class PasswordHash{
         String generatedSecuredPasswordHash=  generateStorngPasswordHash(password);
         return generatedSecuredPasswordHash.substring(5);
     }
+    public boolean getVaildPassword(String originalPassword, String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException
+    {
+        String tempString  = "1000:"+storedPassword;
+        generateStorngPasswordHash(tempString);
+        return validatePassword(originalPassword,tempString);
+    }
     private static boolean validatePassword(String originalPassword, String storedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException
     {
         String[] parts = storedPassword.split(":");
@@ -45,7 +52,6 @@ public class PasswordHash{
         PBEKeySpec spec = new PBEKeySpec(originalPassword.toCharArray(), salt, iterations, hash.length * 8);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] testHash = skf.generateSecret(spec).getEncoded();
-
         int diff = hash.length ^ testHash.length;
         for(int i = 0; i < hash.length && i < testHash.length; i++)
         {
@@ -67,7 +73,6 @@ public class PasswordHash{
         int iterations = 1000;
         char[] chars = password.toCharArray();
         byte[] salt = getSalt();
-
         PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
         SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = skf.generateSecret(spec).getEncoded();

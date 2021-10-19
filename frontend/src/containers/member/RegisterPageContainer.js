@@ -4,7 +4,7 @@ import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {chengeField, registerData, initializeForm,checkId} from "../../modules/member/findUser";
 import {useEffect, useState} from "react";
 
-const RegisterPageContainer = () => {
+const RegisterPageContainer = ({history}) => {
     const dispatch = useDispatch();
     const [vaildError,setVaildError] = useState(null);
     const { resultMsg, error, form,loading } = useSelector(({member,loading }) => ({
@@ -89,6 +89,14 @@ const RegisterPageContainer = () => {
     };
     useEffect(()=>{
         dispatch(initializeForm('register'));
+        /*if(user){
+            history.push('/');
+            try{
+                localStorage.setItem('user',JSON.stringify(user));
+            }catch (e){
+                console.log('localStorage is not working');
+            }
+        }   ,history,user */
     },[dispatch]);
   return (
     <>

@@ -25,7 +25,7 @@ const SearchTextItem = ({ item }) => {
     const { RESULT_MSG, RESULT_FLAG } = item;
     return (
         <div>
-            { RESULT_FLAG === 1 ?
+            { RESULT_FLAG === 'ERROR' ?
                 (
                     <ErrorMsg>{RESULT_MSG}</ErrorMsg>
                 ):(
