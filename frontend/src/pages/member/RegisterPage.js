@@ -5,7 +5,7 @@ const RegisterPage = () => {
     return (
         <>
             <HeaderContainer />
-            <RegisterPageContainer/>
+            <RegisterPageContainer  type = "register"/>
         </>
     );
 }

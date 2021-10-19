@@ -1,17 +1,17 @@
 package com.jumpstd.mukpick.member.api;
 
+import com.jumpstd.mukpick.admin.dto.SearchResponseDto;
 import com.jumpstd.mukpick.mail.service.MailService;
 
-import com.jumpstd.mukpick.member.dto.MemberDto;
-import com.jumpstd.mukpick.member.dto.SearchUserIdMemberDto;
-import com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto;
-import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
+import com.jumpstd.mukpick.member.dto.*;
 import com.jumpstd.mukpick.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @RestController
 @RequestMapping("/api/member/**")
@@ -19,16 +19,7 @@ import java.util.Map;
 public class MemberAPI {
 
     @Autowired
-    private MemberService MemberService;
-
-    @GetMapping("/register")
-    public String joinForm(){
-        return "";
-    }
-    @GetMapping("/update")
-    public String updateForm(){
-        return "";
-    }
+    private MemberService memberService;
 
     /**
      *
@@ -37,20 +28,13 @@ public class MemberAPI {
      * @return
      */
     @GetMapping("/register/{userid}")
-    public Map<String,Object> checkUserId(@PathVariable("userid") String user_id){
+    public ResponseEntity checkUserId(@PathVariable("userid") String user_id){
+
         SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
         searchVaildMemberDto.setUserId(user_id);
-        int resultFlag = MemberService.checkUserId(searchVaildMemberDto);
-        Map<String,Object> resultMap = new HashMap<String,Object>();
+        Map<String, Object> resultMap  = memberService.checkUserId(searchVaildMemberDto);
 
-        if(resultFlag == 1){
-            resultMap.put("RESULT_MSG", "이미 사용중이거나 탈퇴한 아이디입니다.");
-        }else{
-            resultMap.put("RESULT_MSG", "멋진 아이디네요!");
-        }
-
-        resultMap.put("RESULT_FLAG", resultFlag );
-        return resultMap;
+        return ResponseEntity.ok(resultMap);
     }
 
     /**
@@ -60,9 +44,9 @@ public class MemberAPI {
      * @return
      */
     @PostMapping("/register")
-    public Map<String,Object> register(@RequestBody MemberDto memberDto){
-        Map<String,Object> resultMap = MemberService.register(memberDto);
-        return resultMap;
+    public ResponseEntity register(@RequestBody MemberDto memberDto){
+        Map<String,Object> resultMap = memberService.register(memberDto);
+        return ResponseEntity.ok(resultMap);
     }
 
     /**
@@ -73,9 +57,10 @@ public class MemberAPI {
      * @return
      */
     @PostMapping("/password-find-mail")
-    public Map<String,Object>  passwordFind(@RequestBody SearchVaildMemberDto searchVaildMemberDto){
-        Map<String,Object> passwordFind = MemberService.passwordFind(searchVaildMemberDto);
-        return passwordFind;
+    public ResponseEntity passwordFind(@RequestBody SearchVaildMemberDto searchVaildMemberDto){
+        System.out.println(searchVaildMemberDto.getUserId());
+        Map<String,Object> passwordFind = memberService.passwordFind(searchVaildMemberDto);
+        return ResponseEntity.ok(passwordFind);
     }
 
     /**
@@ -84,9 +69,10 @@ public class MemberAPI {
      * @return
      */
     @PostMapping("/user-find")
-    public Map<String,Object> userIdFind(@RequestBody SearchUserIdMemberDto searchUserIdMemberDto){
-        Map<String,Object> userIdFind = MemberService.userIdFind(searchUserIdMemberDto);
-        return userIdFind;
+    public ResponseEntity userIdFind(@RequestBody SearchUserIdMemberDto searchUserIdMemberDto){
+
+        Map<String,Object> userIdFind = memberService.userIdFind(searchUserIdMemberDto);
+        return ResponseEntity.ok(userIdFind);
     }
 
     /**
@@ -95,17 +81,9 @@ public class MemberAPI {
      * @return
      */
     @PostMapping("/update")
-    public Map<String,Object> update(@RequestBody MemberDto memberDto){
-        int resultFlag = MemberService.update(memberDto);
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-        //파일 등록
-        if(resultFlag == 1){
-            resultMap.put("RESULT_MSG",memberDto.getUserId()+ "님의 정보수정이 완료되었습니다.");
-        }else{
-            resultMap.put("RESULT_MSG", memberDto.getUserId()+ "님의 정보수정이 실패되었습니다.\n관리자에게 문의부탁드립니다.");
-        }
-        resultMap.put("RESULT_FLAG", resultFlag );
-        return resultMap;
+    public ResponseEntity update(@RequestBody MemberDto memberDto){
+        Map<String,Object> resultMap = memberService.update(memberDto);
+        return ResponseEntity.ok(resultMap);
     }
 
     /**
@@ -114,9 +92,9 @@ public class MemberAPI {
      * @return
      */
     @PostMapping("/drop-user-mail")
-    public Map<String,Object> dropByUserMail(@PathVariable("userid") String user_id){
-        Map<String,Object> resultMap =  MemberService.dropByUserMail(user_id);
-        return resultMap;
+    public ResponseEntity dropByUserMail(@PathVariable("userid") String user_id){
+        Map<String,Object> resultMap =  memberService.dropByUserMail(user_id);
+        return ResponseEntity.ok(resultMap);
     }
 
 
@@ -127,7 +105,7 @@ public class MemberAPI {
      * @return
      */
     @GetMapping("/{flag}/{key}/{userId}")
-    public Map<String,Object> memberUpdateAuth(
+    public ResponseEntity memberUpdateAuth(
             @PathVariable("flag") String flag,
             @PathVariable("key") String key,
             @PathVariable("userId") String user_id
@@ -137,9 +115,14 @@ public class MemberAPI {
         searchVaildAuthMemberDto.setKey(key);
         searchVaildAuthMemberDto.setUserId(user_id);
 
-        Map<String,Object> resultMap =  MemberService.memberUpdateAuth(searchVaildAuthMemberDto);
-        return resultMap;
+        Map<String,Object> resultMap =  memberService.memberUpdateAuth(searchVaildAuthMemberDto);
+        return ResponseEntity.ok(resultMap);
     }
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginDto loginDto){
+        Map<String,Object> resultMap =  memberService.login(loginDto);
 
+        return ResponseEntity.badRequest().body("인증되지 않는 사용자입니다. ");
+    }
 
 }

@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import loading from './loading';
-import findId, { memberSaga } from './member/findId';
+import findUser, { memberSaga } from './member/findUser';
+import user,{loginSaga} from './member/login';
 import searchMnt, {
   searchMntSaga,
   deleteSearchTextSaga,
@@ -12,7 +13,8 @@ import searchMnt, {
 const rootReducer = combineReducers({
   loading,
   searchMnt,
-  member: findId
+  member: findUser,
+  user
 });
 
 export function* rootSaga() {
@@ -21,7 +23,8 @@ export function* rootSaga() {
     deleteSearchTextSaga(),
     changeValidateSaga(),
     transferSearchTextSaga(),
-    memberSaga()
+    memberSaga(),
+    loginSaga()
   ]);
 }
 

@@ -38,7 +38,7 @@ const Spacer = styled.div`
   height: 4rem;
 `;
 
-const UserHeader = () => {
+const UserHeader = ({user}) => {
   return (
     <>
       <HeaderBlock>

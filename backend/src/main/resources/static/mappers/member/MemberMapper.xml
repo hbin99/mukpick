@@ -16,10 +16,10 @@
             COUNT(*)
         FROM TB_USER
         WHERE USER_ID = #{userId}
-        <if test='email != "" and email != null '>
+        <if test='email != null '>
             AND EMAIL = #{email}
         </if>
-        <if test='password != "" and password != null '>
+        <if test=' password != null '>
             AND PASSWORD = #{password}
         </if>
     </select>
@@ -51,25 +51,25 @@
     <update id="update" parameterType="com.jumpstd.mukpick.member.dto.MemberDto" >
         UPDATE TB_USER
         <trim prefix="SET" suffixOverrides=",">
-            <if test='password != "" and password != null '>
+            <if test='password != null '>
                 PASSWORD = #{password},
             </if>
-            <if test='phone != "" and phone != null '>
+            <if test='phone != null '>
               PHONE = #{phone},
             </if>
-            <if test='profileImg != "" and profileImg != null '>
+            <if test='profileImg != null '>
               PROFILE_IMG =#{profileImg},
             </if>
-            <if test='email != "" and email != null '>
+            <if test='email != null '>
               EMAIL = #{email},
             </if>
-            <if test='age != "" and age != null '>
+            <if test='age != null '>
               AGE = #{age},
             </if>
-            <if test='roleType != "" and roleType != null '>
+            <if test='roleType != null '>
                 ROLE_TYPE = #{roleType},
             </if>
-            <if test='authKey != "" and authKey != null '>
+            <if test=' authKey != null '>
                 AUTH_KEY = #{authKey},
             </if>
         </trim>

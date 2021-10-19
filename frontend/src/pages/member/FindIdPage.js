@@ -1,11 +1,11 @@
-import FindIdPageContainer from '../../containers/member/FindIdPageContainer';
+import FindUserPageContainer from '../../containers/member/FindUserPageContainer';
 import HeaderContainer from "../../containers/common/HeaderContainer";
 
 const FindIdPage = () => {
     return (
         <>
             <HeaderContainer/>
-            <FindIdPageContainer/>
+            <FindUserPageContainer type = "findId"/>
         </>
       );
 }
