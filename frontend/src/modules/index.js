@@ -7,10 +7,12 @@ import searchMnt, {
   changeValidateSaga,
   transferSearchTextSaga,
 } from './admin/searchMnt';
+import foodMnt, { foodInfoListSaga } from './admin/foodMnt';
 
 const rootReducer = combineReducers({
   loading,
   searchMnt,
+  foodMnt,
 });
 
 export function* rootSaga() {
@@ -19,6 +21,7 @@ export function* rootSaga() {
     deleteSearchTextSaga(),
     changeValidateSaga(),
     transferSearchTextSaga(),
+    foodInfoListSaga(),
   ]);
 }
 

@@ -4,6 +4,8 @@ import com.jumpstd.mukpick.admin.dto.SearchRequestDto;
 import com.jumpstd.mukpick.admin.dto.SearchResponseDto;
 import com.jumpstd.mukpick.admin.dto.SearchValidDateRequestDto;
 import com.jumpstd.mukpick.admin.service.SearchMntService;
+import com.jumpstd.mukpick.common.exception.AuthenticationException;
+import com.jumpstd.mukpick.common.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +29,9 @@ public class SearchMntAPI {
      */
     @GetMapping
     public ResponseEntity<List<SearchResponseDto>> searchAllList(SearchRequestDto request){
+        String tmpUserId = "tjdud1994";
         List<SearchResponseDto> responses = searchMntService.findSearchList(request);
-
+        if (tmpUserId.isEmpty()) throw new AuthenticationException(ErrorCode.UNAUTHORIZED_USER); // todo: admin 유저가 아니면 해당 예외 실행으로 변경
         return ResponseEntity.ok(responses);
     }
 

@@ -5,6 +5,8 @@ import com.jumpstd.mukpick.admin.domain.FoodMntDomain;
 import com.jumpstd.mukpick.admin.dto.FoodRequestDto;
 import com.jumpstd.mukpick.admin.dto.FoodResponseDto;
 import com.jumpstd.mukpick.admin.dto.FoodUpdateRequestDto;
+import com.jumpstd.mukpick.admin.exception.NoValidFoodNoException;
+import com.jumpstd.mukpick.common.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +44,11 @@ public class FoodMntServiceImpl implements FoodMntService{
     public FoodResponseDto modifyFoodInfo(FoodUpdateRequestDto fudto) {
         if(fudto.getIsShow() != 'Y' && fudto.getIsShow() != 'N') return null;
         int successFlag = foodMntDao.updateFoodInfo(fudto);
-
+        System.out.println("여기 발생!" + successFlag);
         if(successFlag == 0){
-            return null;
+            throw new NoValidFoodNoException(ErrorCode.NO_VALID_FOOD_NO);
         }
+
         FoodMntDomain foodInfo = foodMntDao.findByFoodNo(fudto.getFoodNo());
         return foodInfo.getFoodMntDto();
     }

@@ -3,9 +3,12 @@ package com.jumpstd.mukpick.admin.api;
 import com.jumpstd.mukpick.admin.dto.FoodRequestDto;
 import com.jumpstd.mukpick.admin.dto.FoodResponseDto;
 import com.jumpstd.mukpick.admin.dto.FoodUpdateRequestDto;
+import com.jumpstd.mukpick.admin.exception.NoValidFoodNoException;
 import com.jumpstd.mukpick.admin.service.FoodMntService;
+import com.jumpstd.mukpick.common.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +32,6 @@ public class FoodMntAPI {
         fudto.setUpFoodNo(foodNo);
         FoodResponseDto response = foodMntService.modifyFoodInfo(fudto);
 
-        if(response == null){
-            return ResponseEntity.badRequest().body("잘못된 요청으로 변경에 실패했습니다.");
-        }
-
         return ResponseEntity.ok(response);
     }
 
@@ -43,8 +42,6 @@ public class FoodMntAPI {
         if (successFlag == 0){
             return ResponseEntity.badRequest().body("삭제에 실패했습니다. 유효하지 않은 음식입니다.");
         }
-
         return ResponseEntity.ok("삭제 성공했습니다.");
     }
-
 }
