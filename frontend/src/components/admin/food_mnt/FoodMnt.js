@@ -84,7 +84,7 @@ const FoodInfoList = ({ list, deleteFoodInfo }) => {
   );
 };
 
-const FoodMnt = ({ searchBar, foodMntList, loading, deleteFoodInfo }) => {
+const  FoodMnt = ({ searchBar, foodMntList, loading, deleteFoodInfo }) => {
   return (
     <>
       <h1>음식명 관리</h1>
