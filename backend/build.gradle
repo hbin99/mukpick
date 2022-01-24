@@ -36,6 +36,3 @@ test {
 	useJUnitPlatform()
 }
 
-test {
-	useJUnitPlatform()
-}
