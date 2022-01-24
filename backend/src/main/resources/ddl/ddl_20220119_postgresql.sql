@@ -76,7 +76,7 @@ CREATE SEQUENCE SEQ_code_no;
 CREATE TABLE TB_CODE(
      code_no NUMERIC(6) DEFAULT NEXTVAL('SEQ_CODE_NO') not null
     ,code_name VARCHAR(50) not null
-    ,gruop_type VARCHAR(50) not null
+    ,group_type VARCHAR(50) not null
     ,constraint pk_code primary key(code_no, code_name)
 );
 
