@@ -9,10 +9,12 @@ import searchMnt, {
   changeValidateSaga,
   transferSearchTextSaga,
 } from './admin/searchMnt';
+import foodMnt, { foodInfoListSaga } from './admin/foodMnt';
 
 const rootReducer = combineReducers({
   loading,
   searchMnt,
+  foodMnt,
   member: findUser,
   user
 });
@@ -23,8 +25,10 @@ export function* rootSaga() {
     deleteSearchTextSaga(),
     changeValidateSaga(),
     transferSearchTextSaga(),
+    foodInfoListSaga(),
     memberSaga(),
     loginSaga()
+
   ]);
 }
 

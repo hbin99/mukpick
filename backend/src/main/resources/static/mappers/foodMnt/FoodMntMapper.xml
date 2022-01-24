@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jumpstd.mukpick.admin.mapper.FoodMntMapper">
+    <select id="findList" resultType="com.jumpstd.mukpick.admin.domain.FoodMntDomain" parameterType="com.jumpstd.mukpick.admin.dto.FoodRequestDto">
+        SELECT FOOD_NO
+             , FOOD_NAME
+             ,IS_SHOW
+             , IS_DEFAULT
+             , REGISTER_DATE
+        FROM TB_FOOD
+        WHERE 1=1
+        <if test="foodName!=null and foodName!=''">
+            AND FOOD_NAME LIKE '%' || #{foodName} || '%'
+        </if>
+        <if test="end != null and end != 0">
+            AND ROWNUM BETWEEN #{start} AND #{end}
+        </if>
+        <if test="isShow != null and isShow != ''">
+            AND IS_SHOW = #{isShow}
+        </if>
+        <if test="isDefault !=null and isDefault != ''">
+            AND IS_DEFAULT = #{isDefault}
+        </if>
+            AND IS_SHOW != 'D'
+        ORDER BY FOOD_NO<if test='asc == false'> DESC</if>
+    </select>
+    <select id="findByFoodNo" parameterType="Long" resultType="com.jumpstd.mukpick.admin.domain.FoodMntDomain">
+        SELECT FOOD_NO
+             , FOOD_NAME
+             ,IS_SHOW
+             , IS_DEFAULT
+             , REGISTER_DATE
+        FROM TB_FOOD
+        WHERE 1=1
+        AND FOOD_NO=#{foodNo}
+        AND IS_SHOW != 'D'
+    </select>
+    <update id="updateFoodInfo" parameterType="com.jumpstd.mukpick.admin.dto.FoodUpdateRequestDto">
+        UPDATE TB_FOOD
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="isShow != null and isShow !=''">
+            IS_SHOW=#{isShow},
+            </if>
+            <if test="foodName != null and foodName != ''">
+            FOOD_NAME=#{foodName},
+            </if>
+        </trim>
+        WHERE FOOD_NO=#{foodNo}
+    </update>
+    <update id="deleteFoodInfo" parameterType="Long">
+        UPDATE TB_FOOD
+        SET IS_SHOW='D'
+        WHERE FOOD_NO=#{foodNo}
+    </update>
+</mapper>

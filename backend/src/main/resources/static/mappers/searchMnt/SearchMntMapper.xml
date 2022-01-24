@@ -30,7 +30,7 @@
              , SEARCH_CNT
         FROM TB_SEARCH_MNT
         WHERE 1=1
-        <if test="searchText!=null">
+        <if test="searchText!=null and searchText!=''">
             AND SEARCH_TEXT LIKE '%' || #{searchText} || '%'
         </if>
         <if test="end != 0">
@@ -40,12 +40,10 @@
     </select>
     <insert id="save" parameterType="String">
         INSERT
-        INTO TB_SEARCH_MNT ( SEARCH_NO
-                            , SEARCH_TEXT
+        INTO TB_SEARCH_MNT ( SEARCH_TEXT
                             ,VALID_DATE)
-        VALUES ( SEQ_SEARCH_NO.NEXTVAL,
-                 #{searchText},
-                SYSDATE + FN_GET_SEARCH_VALID_DATE )
+        VALUES (#{searchText},
+                CURRENT_DATE + FN_GET_SEARCH_VALID_DATE()::integer )
     </insert>
     <delete id="delete" parameterType="Long">
         DELETE FROM TB_SEARCH_MNT WHERE SEARCH_NO = #{searchNo}
@@ -60,11 +58,9 @@
     </update>
     <insert id="transferToFood" parameterType="Long">
         INSERT INTO TB_FOOD (
-         FOOD_NO
-        , FOOD_NAME
+        FOOD_NAME
         ) VALUES(
-        SEQ_FOOD_NO.NEXTVAL
-        , (SELECT SEARCH_TEXT FROM TB_SEARCH_MNT WHERE SEARCH_NO = #{SEARCH_NO})
+        (SELECT SEARCH_TEXT FROM TB_SEARCH_MNT WHERE SEARCH_NO = #{SEARCH_NO})
          )
     </insert>
 </mapper>

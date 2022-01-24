@@ -4,7 +4,9 @@ const Input = styled.input`
   margin-bottom: 10px;
 `;
 
-const SearchBar = ({ name,searchText, onChange, onKeyDown }) => {
+
+const SearchBar = ({ name, searchText, onChange, onKeyDown }) => {
+
   return (
     <>
       <Input

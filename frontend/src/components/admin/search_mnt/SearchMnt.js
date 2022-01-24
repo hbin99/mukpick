@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { getFullDateFormat } from '../../../lib/utils';
 import AskModal from '../../common/AskModal';
+import ErrorMessage from '../../common/ErrorMessage';
 import SelectDateTimeModal from '../../common/SelectDateTimeModal';
 
 const SearchTextItem = ({
@@ -100,7 +101,7 @@ const SearchTextList = ({
           <th>검색횟수</th>
           <th>유효기간</th>
           <th>등록일</th>
-          <th></th>
+          <th>{/* option button */}</th>
         </tr>
       </thead>
       <tbody>
@@ -125,12 +126,17 @@ const SearchMnt = ({
   deleteSearchText,
   changeValidDate,
   transferSearchText,
+  error,
 }) => {
+  if (error) {
+    return <ErrorMessage error={error} />;
+  }
+
   return (
     <>
       <h1>검색어 관리</h1>
       {searchBar}
-      {!loading && searchTextList && (
+      {!loading && searchTextList && !error && (
         <SearchTextList
           list={searchTextList}
           deleteSearchText={deleteSearchText}
