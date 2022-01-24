@@ -44,10 +44,12 @@ public class MailServiceImpl implements MailService{
             // send the message
             javaMailSender.send(message);
 
-            resultMap.put("CODE", "S");
+            resultMap.put("RESULT_FLAG", "SUCCESS");
             resultMap.put("RESULT_MSG", "성공적으로 메일을 전송했습니다.");
         }catch (Exception e){
             e.printStackTrace();
+            resultMap.put("RESULT_FLAG", "ERROR");
+            resultMap.put("RESULT_MSG", "메일 전송에 실패했습니다.");
         }
         return resultMap;
     }

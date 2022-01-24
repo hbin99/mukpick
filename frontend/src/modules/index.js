@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { all } from 'redux-saga/effects';
 import loading from './loading';
+import findUser, { memberSaga } from './member/findUser';
+import user,{loginSaga} from './member/login';
 import searchMnt, {
   searchMntSaga,
   deleteSearchTextSaga,
@@ -13,6 +15,8 @@ const rootReducer = combineReducers({
   loading,
   searchMnt,
   foodMnt,
+  member: findUser,
+  user
 });
 
 export function* rootSaga() {
@@ -22,6 +26,9 @@ export function* rootSaga() {
     changeValidateSaga(),
     transferSearchTextSaga(),
     foodInfoListSaga(),
+    memberSaga(),
+    loginSaga()
+
   ]);
 }
 
