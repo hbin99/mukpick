@@ -24,6 +24,7 @@ public class FoodMntAPI {
     @GetMapping
     public ResponseEntity<List<FoodResponseDto>> foodAllList(FoodRequestDto dto){
         List<FoodResponseDto> foodMntList = foodMntService.findFoodMntList(dto);
+        System.out.println("헬로우");
         return ResponseEntity.ok(foodMntList);
     }
 
