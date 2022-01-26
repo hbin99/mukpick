@@ -14,12 +14,15 @@ import SearchBar from '../../components/admin/search_mnt/SearchBar';
 const SearchMntContainer = ({ location }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { searchTextList, error, loading, searchText } = useSelector(
+  const { searchTextList, error, loading, searchText,asc,start,end } = useSelector(
     ({ searchMnt, loading }) => ({
       searchTextList: searchMnt.searchTextList,
       error: searchMnt.error,
+      searchText: searchMnt.searchCond.searchText,
+      asc: searchMnt.searchCond.asc,
+      start: searchMnt.searchCond.start,
+      end: searchMnt.searchCond.end,
       loading: loading['search_mnt/SEARCH_TEXT_LIST'],
-      searchText: searchMnt.searchText,
     }),
   );
 
@@ -60,7 +63,7 @@ const SearchMntContainer = ({ location }) => {
       ignoreQueryPrefix: true,
     });
 
-    dispatch(searchMntList({ searchText: q, asc: sort }));
+    dispatch(searchMntList({ searchText: q, asc: sort,start, end }));
   }, [dispatch, location.search]);
   return (
     <>

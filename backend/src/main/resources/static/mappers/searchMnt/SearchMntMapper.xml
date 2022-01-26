@@ -33,10 +33,10 @@
         <if test="searchText!=null and searchText!=''">
             AND SEARCH_TEXT LIKE '%' || #{searchText} || '%'
         </if>
-        <if test="end != 0">
-          AND ROWNUM BTWEEN #{start} AND #{end}
-        </if>
         ORDER BY SEARCH_CNT<if test='asc == false'> DESC</if>
+        <if test="end != 0">
+        OFFSET #{start} limit #{end}
+        </if>
     </select>
     <insert id="save" parameterType="String">
         INSERT

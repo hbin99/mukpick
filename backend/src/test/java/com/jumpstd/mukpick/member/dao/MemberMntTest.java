@@ -56,9 +56,9 @@ class MemberMntTest {
         String user_id ="test";
         SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
         searchVaildMemberDto.setUserId(user_id);
-        int chk = memberService.checkUserId(searchVaildMemberDto);
+//        int chk = memberService.checkUserId(searchVaildMemberDto);
 
-        System.out.println(chk);
+//        System.out.println(chk);
         //assertThat(chk).isNotZero();
     }
     @Test

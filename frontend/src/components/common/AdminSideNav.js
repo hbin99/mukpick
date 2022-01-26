@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SideBarBlock = styled.div`
-  display: flex;
+  height: 100%;
+  width: 200px; 
+  position: fixed;
   z-index: 1;
+  top: 0;
   left: 0;
-  width: 18%;
-  float: left;
-  flex-direction: column;
-  height: 100vh;
-  background: #e3855b;
-  padding: 0;
-  overflow: hidden;
-  box-shadow: 2px 0 4px #cfcfcf;
+  background-color: #e3855b;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
 `;
 
 const HomeBtn = styled.div`

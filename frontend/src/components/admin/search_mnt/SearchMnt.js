@@ -4,7 +4,7 @@ import { getFullDateFormat } from '../../../lib/utils';
 import AskModal from '../../common/AskModal';
 import ErrorMessage from '../../common/ErrorMessage';
 import SelectDateTimeModal from '../../common/SelectDateTimeModal';
-
+import '../../../lib/css/admin.css';
 const SearchTextItem = ({
   item,
   deleteSearchText,
@@ -136,14 +136,16 @@ const SearchMnt = ({
     <>
       <h1>검색어 관리</h1>
       {searchBar}
-      {!loading && searchTextList && !error && (
-        <SearchTextList
-          list={searchTextList}
-          deleteSearchText={deleteSearchText}
-          changeValidDate={changeValidDate}
-          transferSearchText={transferSearchText}
-        />
-      )}
+      <div className={"grid_box"}>
+        {!loading && searchTextList && !error && (
+          <SearchTextList
+            list={searchTextList}
+            deleteSearchText={deleteSearchText}
+            changeValidDate={changeValidDate}
+            transferSearchText={transferSearchText}
+          />
+        )}
+      </div>
     </>
   );
 };

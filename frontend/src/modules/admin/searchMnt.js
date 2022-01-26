@@ -10,9 +10,11 @@ const [SEARCH_TEXT_LIST, SEARCH_TEXT_LIST_SUCCESS, SEARCH_TEXT_LIST_FAILURE] =
 
 export const searchMntList = createAction(
   SEARCH_TEXT_LIST,
-  ({ searchText, asc }) => ({
+  ({ searchText, asc, start, end }) => ({
     searchText,
     asc,
+    start,
+    end
   }),
 );
 
@@ -98,17 +100,24 @@ export const changeSearchCond = createAction(
 const initialState = {
   searchTextList: null,
   error: null,
-
   searchNo: null,
-  searchText: '',
-  asc: null,
+  searchCond: {
+    searchText: '',
+    isShow: null,
+    asc: null,
+    start: 0,
+    end: 15
+  },
 };
 
 const searchMnt = handleActions(
   {
     [CHANGE_SEARCH_COND]: (state, { payload: { key, value } }) => ({
       ...state,
-      [key]: value,
+      searchCond: {
+        ...state.searchCond,
+        [key]: value,
+      },
     }),
     [SEARCH_TEXT_LIST_SUCCESS]: (state, { payload: searchTextList }) => ({
       ...state,

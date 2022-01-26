@@ -48,7 +48,9 @@ public class SearchMntServiceImpl implements SearchMntService{
 
     @Override
     public void saveSearchText(String searchText) {
-        searchMntDao.saveOne(searchText);
+        if (findBySearchText(searchText) == null){
+            searchMntDao.saveOne(searchText);
+        }
     }
 
     @Override

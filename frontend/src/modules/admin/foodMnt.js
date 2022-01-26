@@ -47,6 +47,8 @@ const initialState = {
     foodName: '',
     isShow: null,
     asc: null,
+    start: 0,
+    end: 10
   },
 };
 

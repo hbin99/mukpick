@@ -60,7 +60,7 @@ const FoodInfoItem = ({ item, deleteFoodInfo }) => {
 
 const FoodInfoList = ({ list, deleteFoodInfo }) => {
   return (
-    <Table bordered responsive="md" hover>
+    <Table bordered responsive="md" hover className={"grid_box"}>
       <thead>
         <tr>
           <th>NO.</th>
