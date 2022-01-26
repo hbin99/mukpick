@@ -38,6 +38,8 @@ class SearchMntServiceTest {
 
         String text4 = "피자";
         searchMntService.saveSearchText(text4);
+
+        System.out.println("풀리퀘스트 테스트");
     }
 
     @Test
