@@ -1,0 +1,10 @@
+.grid_box {
+    overflow: auto;
+    margin:10px;
+    display: block;
+    max-height:100vh;
+}
+
+body {
+    overflow: hidden;
+}
