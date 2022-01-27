@@ -10,10 +10,12 @@ import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
 import com.jumpstd.mukpick.member.mapper.MemberMapper;
 import com.jumpstd.mukpick.member.service.MemberService;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-//@Transactional
+@Transactional
 @DisplayName("Test")
 class MemberMntTest {
     @Autowired
@@ -32,10 +34,10 @@ class MemberMntTest {
 
     @Autowired
     MailService mailService;
-
-    /*@BeforeEach
+/*
+    @BeforeEach
     @DisplayName("Member insert")
-    public void param(){
+  public void param(){
         MemberDto dto = new MemberDto();
         dto.setUserId("test2");
         dto.setAge(23);
@@ -56,9 +58,8 @@ class MemberMntTest {
         String user_id ="test";
         SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
         searchVaildMemberDto.setUserId(user_id);
-        int chk = memberService.checkUserId(searchVaildMemberDto);
+        Map<String, Object> resultMap = memberService.checkUserId(searchVaildMemberDto);
 
-        System.out.println(chk);
         //assertThat(chk).isNotZero();
     }
     @Test
