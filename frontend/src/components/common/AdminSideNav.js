@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const SideBarBlock = styled.div`
   height: 100%;
   width: 200px; 
-  position: fixed;
+  float: left;
   z-index: 1;
   top: 0;
   left: 0;

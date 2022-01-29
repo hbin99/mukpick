@@ -1,10 +1,15 @@
 .grid_box {
     overflow: auto;
-    margin:10px;
-    display: block;
-    max-height:100vh;
 }
 
-body {
-    overflow: hidden;
+
+.search_input {
+    flex-shrink: 0;
+    min-height: 40px;
+
 }
+
+.search_input input {
+    width:100%;
+}
+

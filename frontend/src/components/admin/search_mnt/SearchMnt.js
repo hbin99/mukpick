@@ -93,7 +93,8 @@ const SearchTextList = ({
   transferSearchText,
 }) => {
   return (
-    <Table bordered responsive="md" hover>
+    <div className={"grid_box"}>
+    <Table bordered responsive="md" hover >
       <thead>
         <tr>
           <th>No.</th>
@@ -116,6 +117,7 @@ const SearchTextList = ({
         ))}
       </tbody>
     </Table>
+    </div>
   );
 };
 
@@ -134,9 +136,11 @@ const SearchMnt = ({
 
   return (
     <>
-      <h1>검색어 관리</h1>
+      <div className={"page_title"}>
+        <h1>검색어 관리</h1>
+      </div>
       {searchBar}
-      <div className={"grid_box"}>
+
         {!loading && searchTextList && !error && (
           <SearchTextList
             list={searchTextList}
@@ -145,7 +149,7 @@ const SearchMnt = ({
             transferSearchText={transferSearchText}
           />
         )}
-      </div>
+
     </>
   );
 };
