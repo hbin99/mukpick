@@ -1,12 +1,8 @@
 package com.jumpstd.mukpick.member.dao;
 
 import com.jumpstd.mukpick.config.RollType;
-import com.jumpstd.mukpick.mail.dto.MailDto;
 import com.jumpstd.mukpick.mail.service.MailService;
-import com.jumpstd.mukpick.member.dto.MemberDto;
-import com.jumpstd.mukpick.member.dto.SearchUserIdMemberDto;
-import com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto;
-import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
+import com.jumpstd.mukpick.member.dto.*;
 import com.jumpstd.mukpick.member.mapper.MemberMapper;
 import com.jumpstd.mukpick.member.service.MemberService;
 
@@ -34,125 +30,119 @@ class MemberMntTest {
 
     @Autowired
     MailService mailService;
-/*
+
     @BeforeEach
     @DisplayName("Member insert")
-  public void param(){
-        MemberDto dto = new MemberDto();
+    public void param(){
+        MemberRegisteDto dto = new MemberRegisteDto();
         dto.setUserId("test2");
         dto.setAge(23);
-        dto.setEmail("hyebin9612@gmail.com");
-        dto.setPassword("test123");
-        dto.setProfileImg("");
-        dto.setPhone("010-2222-1111");
-        dto.setGender('F');
-        dto.setRoleType(RollType.USER.getValue());
-        dto.setUserName("테스트");
-
-        mapper.register(dto);
-    }*/
-
-    @Test
-    @DisplayName("id check")
-    public void chkUserId(){
-        String user_id ="test";
-        SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
-        searchVaildMemberDto.setUserId(user_id);
-        Map<String, Object> resultMap = memberService.checkUserId(searchVaildMemberDto);
-
-        //assertThat(chk).isNotZero();
-    }
-    @Test
-    @DisplayName("회원가입 신청 후 메일 전송")
-    public void registerSendMail(){
-        MemberDto dto = new MemberDto();
-        dto.setUserId("test2");
-        dto.setAge(23);
-        dto.setEmail("dbseoyyyy@gmail.com");
+        dto.setEmail("test123@gmail.com");
         dto.setPassword("test123");
         dto.setProfileImg("");
         dto.setPhone("010-2222-6666");
         dto.setGender('F');
         dto.setRoleType(RollType.BEFORE_SING_UP_USER.getValue());
+        dto.setUserName("테스트2");
+
+        mapper.register(dto);
+    }
+
+    @Test
+    @DisplayName("id check")
+    public void findByUser(){
+        String user_id ="test2";
+        int result = memberService.findByUser(user_id);
+        assertThat(result).isEqualTo(1);
+    }
+    @Test
+    @DisplayName("register > mail send ")
+    public void registerSendMail(){
+        MemberRegisteDto dto = new MemberRegisteDto();
+        dto.setUserId("test");
+        dto.setAge(23);
+        dto.setEmail("dbseoyyyy@gmail.com");
+        dto.setPassword("dbseoyyyy");
+        dto.setProfileImg("");
+        dto.setPhone("010-1111-2222");
+        dto.setGender('F');
+        dto.setRoleType(RollType.BEFORE_SING_UP_USER.getValue());
         dto.setUserName("테스트");
 
-        Map<String,Object> returnMap = memberService.register(dto);
+        int result = memberService.register(dto);
 
-        assertThat(returnMap.get("CODE")).isEqualTo("S");
-        System.out.println(returnMap.get("RESULT_MSG"));
-
+        assertThat(result).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("회원가입 메일 클릭시 ")
+    @DisplayName("register mail click ")
     public void register() {
         // given
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserId("test2");
-        memberDto.setRoleType(RollType.USER.getValue());
-        memberDto.setAuthKey("");
+        MemberInfoDto dto = new MemberInfoDto();
+        dto.setUserId("test");
+        dto.setRoleType(RollType.USER.getValue());
+        dto.setAuthKey("");
         // when
-        memberService.update(memberDto);
+        memberService.update(dto);
         // then
-        List<MemberDto> list = mapper.userList(memberDto);
-        for(MemberDto dto : list){
-            System.out.println("회원정보 : " + dto.toString());
-        }
+        int result = memberService.findByUser(dto.getUserId());
+        assertThat(result).isEqualTo(1);
+
     }
     @Test
-    @DisplayName("아이디 찾기")
+    @DisplayName("id find")
     public void userIdFind() {
         // given
-        SearchUserIdMemberDto searchUserIdMemberDto = new SearchUserIdMemberDto();
-        searchUserIdMemberDto.setUserName("테스트");
-        searchUserIdMemberDto.setEmail("tjdud1994@gmail.com");
-        searchUserIdMemberDto.setPhone("010-2222-2222");
+        SearchUserIdDto dto = new SearchUserIdDto();
+        dto.setUserName("테스트");
+        dto.setEmail("dbseoyyyy@gmail.com");
+        dto.setPhone("010-1111-2222");
         // when
-        Map<String,Object> returnMap = memberService.userIdFind(searchUserIdMemberDto);
+        String result= memberService.findByUserId(dto);
         // then
-        System.out.println(returnMap.get("RESULT_MSG"));
+        assertThat(result).isEqualTo(result);
     }
+
     @Test
-    @DisplayName("비밀번호 찾기")
+    @DisplayName("password find")
     public void passwordFind() {
         // given
         SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
-        searchVaildMemberDto.setUserId("test2");
-        searchVaildMemberDto.setEmail("tjdud1994@gmail.com");
+        searchVaildMemberDto.setUserId("test");
+        searchVaildMemberDto.setEmail("dbseoyyyy@gmail.com");
         // when
-        Map<String,Object> returnMap =memberService.passwordFind(searchVaildMemberDto);
+        int result = memberService.passwordFind(searchVaildMemberDto);
         // then
-        System.out.println(returnMap.get("RESULT_MSG"));
+        assertThat(result).isEqualTo(1);
     }
     @Test
-    @DisplayName("회원정보 수정")
+    @DisplayName("member Update")
     public void update() {
         // given
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUserId("test");
-        memberDto.setEmail("test123@gmail.com");
-        memberDto.setPhone("010-1234-5678");
-        memberDto.setAge(13);
+        MemberInfoDto dto = new MemberInfoDto();
+        dto.setUserId("test");
+        dto.setEmail("dbseoyyyy12@gmail.com");
+        dto.setPhone("010-1234-5678");
+        dto.setAge(13);
         // when
-        memberService.update(memberDto);
+        memberService.update(dto);
         // then
-        List<MemberDto> list = mapper.userList(memberDto);
-        for(MemberDto dto : list){
-            System.out.println("회원정보 : " + dto.toString());
-        }
+        MemberInfoDto memberInfoDto = memberService.findByUserData(dto.getUserId());
+        assertThat(memberInfoDto).isNull();
+
     }
     @Test
-    @DisplayName("회원탈퇴 메일 전송")
+    @DisplayName("drop member > mail send")
     public void memberOutSend() {
         // given
-        String user_id = "test2";
+        String user_id = "test";
         // when
-        Map<String,Object> returnMap = memberService.dropByUserMail(user_id);
+        int result = memberService.dropByUserMail(user_id);
         // then
-        System.out.println(returnMap.get("RESULT_MSG"));
+        assertThat(result).isEqualTo(1);
     }
-    @Test
-    @DisplayName("회원탈퇴")
+   /* @Test
+    @DisplayName("drop member")
     public void memberOut() {
         // given
         SearchVaildAuthMemberDto searchVaildAuthMemberDto = new SearchVaildAuthMemberDto();
@@ -160,39 +150,15 @@ class MemberMntTest {
         searchVaildAuthMemberDto.setKey("");
         searchVaildAuthMemberDto.setFlag("OutSend");
         // when
-        Map<String,Object> returnMap = memberService.memberUpdateAuth(searchVaildAuthMemberDto);
+        boolean result = memberService.memberUpdateAuth(searchVaildAuthMemberDto);
         // then
-        System.out.println(returnMap.get("RESULT_MSG"));
+        assertThat(result).isEqualTo(true);
 
     }
-
+*/
     @Test
     public void testest(){
-
-        MemberDto dto = new MemberDto();
-        dto.setUserId("test2");
-        dto.setAge(23);
-        dto.setEmail("dbseoyyyy@gmail.com");
-        dto.setPassword("test123");
-        dto.setProfileImg("");
-        dto.setPhone("010-2222-6666");
-        dto.setGender('F');
-        dto.setRoleType(RollType.BEFORE_SING_UP_USER.getValue());
-        dto.setUserName("테스트");
-
-        /*MailDto mailDto = new MailDto();
-        try {
-            mailDto.setTitle("테스트 메일입니다.");
-            mailDto.setContext("테스트 메일입니다.");
-            mailDto.setAddress("tjdud1994@gmail.com");
-
-            mailService.mailSend(mailDto);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }*/
-        memberService.register(dto);
-         System.out.println("");
-
+        //param();
     }
 
 }

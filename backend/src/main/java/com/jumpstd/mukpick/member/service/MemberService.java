@@ -5,22 +5,25 @@ import com.jumpstd.mukpick.member.dto.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Map;
+import java.util.Optional;
 
 public interface MemberService {
 
-    public Map<String,Object> checkUserId(SearchVaildMemberDto searchVaildMemberDto);
+    int findByUser(String userId);
 
-    public Map<String,Object> register(MemberDto memberDto);
+    int register(MemberRegisteDto memberRegisteDto);
 
-    public Map<String,Object> update(MemberDto memberDto);
+    MemberInfoDto findByUserData(String userId);
 
-    public Map<String,Object> passwordFind(SearchVaildMemberDto searchVaildMemberDto);
+    int update(MemberInfoDto memberInfoDto);
 
-    public Map<String,Object> userIdFind(SearchUserIdMemberDto searchUserIdMemberDto);
+    int passwordFind(SearchVaildMemberDto searchVaildMemberDto);
 
-    public Map<String,Object> dropByUserMail(String user_id);
+    String findByUserId(SearchUserIdDto searchUserIdDto);
 
-    public Map<String,Object> memberUpdateAuth(SearchVaildAuthMemberDto searchVaildAuthMemberDto);
+    int dropByUserMail(String userId);
 
-    public Map<String,Object> login(LoginDto loginDto);
+    boolean memberUpdateAuth(SearchVaildAuthMemberDto searchVaildAuthMemberDto);
+
+    //public MemberDto login(LoginDto loginDto);
 }

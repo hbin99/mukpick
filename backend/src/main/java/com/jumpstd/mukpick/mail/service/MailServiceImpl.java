@@ -27,8 +27,7 @@ public class MailServiceImpl implements MailService{
     private MailConfig mailConfig;
 
 
-    public Map<String,Object> mailSend(MailDto mailDto)  {
-        Map<String,Object> resultMap = new HashMap<>();
+    public boolean mailSend(MailDto mailDto)  {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
@@ -44,14 +43,11 @@ public class MailServiceImpl implements MailService{
             // send the message
             javaMailSender.send(message);
 
-            resultMap.put("RESULT_FLAG", "SUCCESS");
-            resultMap.put("RESULT_MSG", "성공적으로 메일을 전송했습니다.");
         }catch (Exception e){
             e.printStackTrace();
-            resultMap.put("RESULT_FLAG", "ERROR");
-            resultMap.put("RESULT_MSG", "메일 전송에 실패했습니다.");
+            return false;
         }
-        return resultMap;
+        return true;
     }
 
 

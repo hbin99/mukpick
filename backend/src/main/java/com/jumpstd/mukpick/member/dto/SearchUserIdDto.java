@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class SearchUserIdMemberDto {
+public class SearchUserIdDto {
     private String email;
     private String userName;
     private String phone;

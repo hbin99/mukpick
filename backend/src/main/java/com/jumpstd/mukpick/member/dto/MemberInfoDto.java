@@ -1,6 +1,5 @@
 package com.jumpstd.mukpick.member.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -8,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @RequiredArgsConstructor
-public class MemberDto {
+public class MemberInfoDto {
     private String userId;
     private String password;
     private String userName;

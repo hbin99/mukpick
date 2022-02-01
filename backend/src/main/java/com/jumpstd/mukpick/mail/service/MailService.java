@@ -6,5 +6,5 @@ import javax.mail.MessagingException;
 import java.util.Map;
 
 public interface MailService {
-    public Map<String,Object> mailSend(MailDto mailDto) throws MessagingException;
+    boolean mailSend(MailDto mailDto) throws MessagingException;
 }
