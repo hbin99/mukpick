@@ -1,30 +1,46 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import {
   changeSearchCond,
   changeSearchValidDate,
   deleteSearchText,
-  searchMntList,
+  getSearchMntList,
   transferToFoodMnt,
-} from '../../modules/admin/searchMnt';
+} from '../../modules/admin/searchMntModule';
 import { withRouter, useHistory } from 'react-router-dom';
 import SearchMnt from '../../components/admin/search_mnt/SearchMnt';
 import SearchBar from '../../components/admin/search_mnt/SearchBar';
+
+
 const SearchMntContainer = ({ location }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { searchTextList, error, loading, searchText,asc,start,end } = useSelector(
+  const { searchTextList, error, loading, searchText,asc,start,limit,hasNext } = useSelector(
     ({ searchMnt, loading }) => ({
       searchTextList: searchMnt.searchTextList,
       error: searchMnt.error,
       searchText: searchMnt.searchCond.searchText,
       asc: searchMnt.searchCond.asc,
       start: searchMnt.searchCond.start,
-      end: searchMnt.searchCond.end,
+      limit: searchMnt.searchCond.limit,
+      hasNext: searchMnt.hasNext,
       loading: loading['search_mnt/SEARCH_TEXT_LIST'],
     }),
   );
+
+  const [bottom, setBottom] = useState(null);
+  const bottomObserver = useRef(null);
+
+  /* 검색 */
+  useEffect(() => {
+    let { q } = qs.parse(location.search, {
+      ignoreQueryPrefix: true,
+    });
+    // if(hasNext == null || hasNext){
+      dispatch(getSearchMntList({ searchText: q, asc}));
+    // }
+  }, [dispatch, location.search ]);
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -58,14 +74,9 @@ const SearchMntContainer = ({ location }) => {
     history.push('/admin/search-mnt');
   }, [history]);
 
-  useEffect(() => {
-    const { q, sort } = qs.parse(location.search, {
-      ignoreQueryPrefix: true,
-    });
 
-    dispatch(searchMntList({ searchText: q, asc: sort,start, end }));
-  }, [dispatch, location.search]);
   return (
+
     <>
       <SearchMnt
         loading={loading}

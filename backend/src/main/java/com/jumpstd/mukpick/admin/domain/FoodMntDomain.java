@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 @Getter
 @AllArgsConstructor
@@ -14,7 +15,7 @@ public class FoodMntDomain {
     private String foodName;
     private char isShow;
     private char isDefault;
-    private Date registerDate;
+    private OffsetDateTime registerDate;
 
     public FoodResponseDto getFoodMntDto(){
         return new FoodResponseDto(foodNo,foodName,isShow,isDefault,registerDate);

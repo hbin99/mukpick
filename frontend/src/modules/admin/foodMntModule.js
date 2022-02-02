@@ -46,13 +46,13 @@ const initialState = {
   searchCond: {
     foodName: '',
     isShow: null,
-    asc: null,
+    asc: true,
     start: 0,
     end: 10
   },
 };
 
-const foodMnt = handleActions(
+const foodMntModule = handleActions(
   {
     [CHANGE_SEARCH_COND]: (state, { payload: { key, value } }) => ({
       ...state,
@@ -69,8 +69,19 @@ const foodMnt = handleActions(
       ...state,
       error,
     }),
+
+    [DELETE_FOOD_INFO_SUCCESS]: (state, { payload: foodNo }) => ({
+      ...state,
+      foodMntList: state.foodMntList.filter(
+        (item) => item.foodNo !== foodNo,
+      ),
+    }),
+    [DELETE_FOOD_INFO_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      error,
+    }),
   },
   initialState,
 );
 
-export default foodMnt;
+export default foodMntModule;

@@ -16,14 +16,18 @@ public class SearchMntServiceImpl implements SearchMntService{
     SearchMntDao searchMntDao;
 
     @Override
-    public List<SearchResponseDto> findSearchList(SearchRequestDto sdto) {
-        List<SearchMntDomain> searchList = searchMntDao.findList(sdto);
+    public List<SearchResponseDto> findSearchList(SearchRequestDto requestDto) {
 
+
+        List<SearchMntDomain> searchList = searchMntDao.findList(requestDto);
         List<SearchResponseDto> resultList = new ArrayList();
+        Boolean hasNext = hasNext(requestDto);
 
         for (SearchMntDomain domain:searchList) {
-            resultList.add(domain.getSearchMntDto());
+                resultList.add(domain.getSearchMntDto());
+                resultList.get(resultList.size()-1).changeHasNext(hasNext);
         }
+
 
         return resultList;
     }
@@ -83,5 +87,13 @@ public class SearchMntServiceImpl implements SearchMntService{
             return flag;
         }
         return 0;
+    }
+
+    public Boolean hasNext(SearchRequestDto searchRequestDTO){
+        int totalCnt = searchMntDao.countSearchList(searchRequestDTO);
+        if(searchRequestDTO.getStart() + searchRequestDTO.getLimit() < totalCnt){
+            return true;
+        }
+        return false;
     }
 }

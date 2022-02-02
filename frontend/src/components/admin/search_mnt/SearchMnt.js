@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { getFullDateFormat } from '../../../lib/utils';
 import AskModal from '../../common/AskModal';
@@ -92,6 +92,7 @@ const SearchTextList = ({
   changeValidDate,
   transferSearchText,
 }) => {
+
   return (
     <div className={"grid_box"}>
     <Table bordered responsive="md" hover >
@@ -106,15 +107,16 @@ const SearchTextList = ({
         </tr>
       </thead>
       <tbody>
-        {list.map((item) => (
+        {list.map((item, index) => (
           <SearchTextItem
             item={item}
-            key={item.searchNo}
+            key={index}
             deleteSearchText={deleteSearchText}
             changeValidDate={changeValidDate}
             transferSearchText={transferSearchText}
           />
         ))}
+      <button>클릭</button>
       </tbody>
     </Table>
     </div>
@@ -133,14 +135,12 @@ const SearchMnt = ({
   if (error) {
     return <ErrorMessage error={error} />;
   }
-
   return (
     <>
       <div className={"page_title"}>
         <h1>검색어 관리</h1>
       </div>
       {searchBar}
-
         {!loading && searchTextList && !error && (
           <SearchTextList
             list={searchTextList}

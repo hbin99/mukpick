@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +41,10 @@ class SearchMntServiceTest {
         searchMntService.saveSearchText("김밥");
         searchMntService.saveSearchText("수육");
         searchMntService.saveSearchText("보쌈");
-        searchMntService.saveSearchText("족발");
+        searchMntService.saveSearchText("닭도리탕");
+        searchMntService.saveSearchText("낙곱새");
+        searchMntService.saveSearchText("전어");
+        searchMntService.saveSearchText("과메기");
     }
 
     @Test
@@ -104,8 +107,7 @@ class SearchMntServiceTest {
 
         // 변경할 날짜
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = sdf.parse("2021-12-31");
-
+        OffsetDateTime date= OffsetDateTime.now().plusDays(90);
         SearchValidDateRequestDto dto = new SearchValidDateRequestDto(searchNo, date);
         // when
         searchMntService.changeValidDate(dto);

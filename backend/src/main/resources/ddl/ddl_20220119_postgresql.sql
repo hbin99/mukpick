@@ -11,7 +11,7 @@ CREATE table TB_USER (
     ,role_type				CHAR(1)	                    					                NOT NULL  -- (1:시스템 관리자, 2:일반 유저, 3:탈퇴 유저, 4:정지 유저)
     ,gender					CHAR(1)															NOT NULL
     ,age					INTEGER													        NOT NULL
-    ,register_date		    DATE						DEFAULT CURRENT_DATE				NOT NULL
+    ,register_date		    DATE						DEFAULT CURRENT_TIMESTAMP				NOT NULL
 );
 
 ALTER TABLE TB_USER ADD CONSTRAINT PK_USER_USER_ID PRIMARY KEY (user_id);
@@ -30,7 +30,7 @@ CREATE TABLE TB_CALENDAR (
     ,feeling_cd			INTEGER
     ,memo				VARCHAR(100)
     ,address			VARCHAR(100)
-    ,register_date		DATE						DEFAULT CURRENT_DATE					NOT NULL
+    ,register_date		DATE						DEFAULT CURRENT_TIMESTAMP 					NOT NULL
 );
 
 ALTER TABLE TB_CALENDAR ADD CONSTRAINT PK_CALENDAR_CALENDAR_NO PRIMARY KEY (calendar_no);
@@ -49,7 +49,7 @@ CREATE TABLE TB_SEARCH_MNT (
     ,search_text VARCHAR(512) NOT NULL
     ,search_cnt INTEGER DEFAULT 1 NOT NULL
     ,valid_date DATE NOT NULL
-    ,register_date DATE DEFAULT CURRENT_DATE NOT NULL
+    ,register_date DATE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE TB_PERSONAL_TASTE (
     ,weather_cd INTEGER
     ,feeling_cd INTEGER
     ,food_cd INTEGER NOT NULL
-    ,register_date DATE default CURRENT_DATE NOT NULL
+    ,register_date DATE default CURRENT_TIMESTAMP NOT NULL
     ,count INTEGER DEFAULT 1
     ,CONSTRAINT FK_PERSONAL_TASTE_USER_ID FOREIGN KEY(user_id)
         REFERENCES TB_USER(user_id) ON DELETE CASCADE
@@ -93,7 +93,7 @@ CREATE TABLE TB_RESTAURANT(
     ,mapx VARCHAR(50) not null
     ,mapy VARCHAR(50) not null
     ,score NUMERIC(2,1) not null
-    ,register_date date default CURRENT_DATE not null
+    ,register_date date default CURRENT_TIMESTAMP not null
 );
 
 /* 시퀀스 */
@@ -103,7 +103,7 @@ CREATE TABLE TB_BOOKMARK(
      bookmark_no INTEGER primary key DEFAULT NEXTVAL('SEQ_bookmark_no') not null
     ,user_id VARCHAR(20) not null
     ,restaurant_no INTEGER not null
-    ,register_date date default CURRENT_DATE not null
+    ,register_date date default CURRENT_TIMESTAMP not null
     ,constraint fk_user_id FOREIGN KEY(user_id) REFERENCES TB_USER(user_id) ON DELETE CASCADE
     ,constraint fk_restaurant_no FOREIGN KEY(restaurant_no) REFERENCES TB_RESTAURANT(restaurant_no) ON DELETE CASCADE
 );
@@ -117,7 +117,7 @@ CREATE SEQUENCE SEQ_REVIEW_NO;
 CREATE TABLE TB_REVIEW(
      REVIEW_NO INTEGER NOT NULL DEFAULT NEXTVAL('SEQ_REVIEW_NO') PRIMARY KEY
     ,CONTENT VARCHAR(100) NOT NULL
-    ,REGISTER_DATE DATE DEFAULT CURRENT_DATE NOT NULL
+    ,REGISTER_DATE DATE DEFAULT CURRENT_TIMESTAMP NOT NULL
     ,MODIFIED_DATE DATE
     ,USER_ID VARCHAR(20) NOT NULL
     ,SCORE INTEGER NOT NULL
@@ -159,7 +159,7 @@ CREATE TABLE TB_FOOD(
     ,food_name VARCHAR(100) NOT NULL
     ,is_show CHAR(1) DEFAULT 'Y' NOT NULL
     ,is_default CHAR(1) DEFAULT 'N' NOT NULL
-    ,register_date DATE DEFAULT CURRENT_DATE NOT NULL
+    ,register_date DATE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 
@@ -174,7 +174,7 @@ CREATE TABLE TB_TAG_HISTORY (
     ,weather_cd INTEGER
     ,feeling_cd INTEGER
     ,food_cd INTEGER NOT NULL
-    ,register_date DATE default CURRENT_DATE NOT NULL
+    ,register_date DATE default CURRENT_TIMESTAMP NOT NULL
     ,CONSTRAINT FK_TAG_HISTORY_USER_ID FOREIGN KEY(user_id)
         REFERENCES TB_USER(user_id) ON DELETE CASCADE
 );

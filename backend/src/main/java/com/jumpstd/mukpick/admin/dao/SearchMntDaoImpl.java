@@ -54,4 +54,9 @@ public class SearchMntDaoImpl implements SearchMntDao{
     public int transferToFood(Long searchNo) {
         return searchMntMapper.transferToFood(searchNo);
     }
+
+    @Override
+    public int countSearchList(SearchRequestDto searchRequestDTO) {
+        return searchMntMapper.countSearchList(searchRequestDTO);
+    }
 }

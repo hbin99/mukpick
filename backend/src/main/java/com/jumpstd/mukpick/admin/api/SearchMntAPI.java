@@ -29,9 +29,12 @@ public class SearchMntAPI {
      */
     @GetMapping
     public ResponseEntity<List<SearchResponseDto>> searchAllList(SearchRequestDto request){
-        System.out.println("start and end " + request.getStart() + ", " + request.getEnd());
+        System.out.println("start and limit " + request.getStart() + ", " + request.getLimit());
         String tmpUserId = "tjdud1994"; // 임시 처리 로그인 기능 구현 시 로그인 유저 정보로 체크 예정
         List<SearchResponseDto> responses = searchMntService.findSearchList(request);
+        for (SearchResponseDto response : responses) {
+            System.out.println(response);
+        }
         if (tmpUserId.isEmpty()) throw new AuthenticationException(ErrorCode.UNAUTHORIZED_USER); // todo: admin 유저가 아니면 해당 예외 실행으로 변경
         return ResponseEntity.ok(responses);
     }
@@ -59,6 +62,7 @@ public class SearchMntAPI {
     public ResponseEntity<SearchResponseDto> changeValidDate(@PathVariable Long searchNo,
                                                              @RequestBody RequestDateDto dateDto){
         SearchValidDateRequestDto request = new SearchValidDateRequestDto(searchNo, dateDto.getDate());
+        System.out.println(dateDto.getDate());
         SearchResponseDto searchResponseDto = searchMntService.changeValidDate(request);
         return ResponseEntity.ok(searchResponseDto);
     }

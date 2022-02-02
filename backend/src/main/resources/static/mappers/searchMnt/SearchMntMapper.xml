@@ -13,7 +13,7 @@
         FROM TB_SEARCH_MNT
         WHERE SEARCH_TEXT = #{searchText}
     </select>
-    <select id="findBySearchNo" resultType="com.jumpstd.mukpick.admin.domain.SearchMntDomain" parameterType="Long">
+    <select id="findBySearchNo"  resultType="com.jumpstd.mukpick.admin.domain.SearchMntDomain" parameterType="Long">
         SELECT SEARCH_NO
              , SEARCH_TEXT
              , VALID_DATE
@@ -33,9 +33,9 @@
         <if test="searchText!=null and searchText!=''">
             AND SEARCH_TEXT LIKE '%' || #{searchText} || '%'
         </if>
-        ORDER BY SEARCH_CNT<if test='asc == false'> DESC</if>
-        <if test="end != 0">
-        OFFSET #{start} limit #{end}
+        ORDER BY SEARCH_NO<if test='asc == false'> DESC</if>
+        <if test="limit != 0">
+        OFFSET #{start} limit #{limit}
         </if>
     </select>
     <insert id="save" parameterType="String">
@@ -43,7 +43,8 @@
         INTO TB_SEARCH_MNT ( SEARCH_TEXT
                             ,VALID_DATE)
         VALUES (#{searchText},
-                CURRENT_DATE + FN_GET_SEARCH_VALID_DATE()::integer )
+                CURRENT_TIMESTAMP  +(FN_GET_SEARCH_VALID_DATE() || ' days')::interval
+                )
     </insert>
     <delete id="delete" parameterType="Long">
         DELETE FROM TB_SEARCH_MNT WHERE SEARCH_NO = #{searchNo}
@@ -53,7 +54,7 @@
     </delete>
     <update id="changeValidDate" parameterType="com.jumpstd.mukpick.admin.dto.SearchValidDateRequestDto">
         UPDATE TB_SEARCH_MNT
-        SET VALID_DATE = #{changeDate}
+        SET VALID_DATE = #{changedDate}
         WHERE SEARCH_NO =#{searchNo}
     </update>
     <insert id="transferToFood" parameterType="Long">
@@ -63,4 +64,10 @@
         (SELECT SEARCH_TEXT FROM TB_SEARCH_MNT WHERE SEARCH_NO = #{SEARCH_NO})
          )
     </insert>
+    <select id="countSearchList" resultType="int" parameterType="com.jumpstd.mukpick.admin.dto.SearchRequestDto">
+        SELECT COUNT(SEARCH_NO) FROM TB_SEARCH_MNT
+        <if test="searchText!=null and searchText!=''">
+        WHERE SEARCH_TEXT LIKE '%' || #{searchText} || '%'
+        </if>
+    </select>
 </mapper>

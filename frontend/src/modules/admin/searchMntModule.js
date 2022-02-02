@@ -8,13 +8,13 @@ import { takeLatest } from 'redux-saga/effects';
 const [SEARCH_TEXT_LIST, SEARCH_TEXT_LIST_SUCCESS, SEARCH_TEXT_LIST_FAILURE] =
   createRequestActionTypes('search_mnt/SEARCH_TEXT_LIST');
 
-export const searchMntList = createAction(
+export const getSearchMntList = createAction(
   SEARCH_TEXT_LIST,
-  ({ searchText, asc, start, end }) => ({
+  ({ searchText, asc, start, limit }) => ({
     searchText,
     asc,
     start,
-    end
+    limit
   }),
 );
 
@@ -98,19 +98,20 @@ export const changeSearchCond = createAction(
 );
 
 const initialState = {
-  searchTextList: null,
+  searchTextList: [],
   error: null,
   searchNo: null,
+  hasNext: null,
   searchCond: {
     searchText: '',
     isShow: null,
-    asc: null,
+    asc: true,
     start: 0,
-    end: 15
+    limit: null
   },
 };
 
-const searchMnt = handleActions(
+const searchMntModule = handleActions(
   {
     [CHANGE_SEARCH_COND]: (state, { payload: { key, value } }) => ({
       ...state,
@@ -161,4 +162,4 @@ const searchMnt = handleActions(
   initialState,
 );
 
-export default searchMnt;
+export default searchMntModule;

@@ -2,13 +2,13 @@ import client from './client';
 import qs from 'qs';
 
 /* 검색관리 - 검색어 리스트 조회 */
-export const getSearchMntList = ({ searchText, sort, start, end }) => {
-  console.log(start,end)
+export const getSearchMntList = ({ searchText, sort,asc, start, limit }) => {
   const queryString = qs.stringify({
     searchText,
     sort,
+    asc,
     start,
-    end
+    limit
   });
   return client.get(`/api/admin/search?${queryString}`);
 };

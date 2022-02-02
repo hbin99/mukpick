@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import FoodMnt from '../../components/admin/food_mnt/FoodMnt';
 import SearchBar from '../../components/admin/search_mnt/SearchBar';
-import { changeSearchCond, getFoodMntList } from '../../modules/admin/foodMnt';
+import { changeSearchCond, getFoodMntList } from '../../modules/admin/foodMntModule';
 import qs from 'qs';
 import { useHistory, withRouter } from 'react-router';
 

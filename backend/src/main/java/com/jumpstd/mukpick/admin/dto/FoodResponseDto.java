@@ -2,6 +2,7 @@ package com.jumpstd.mukpick.admin.dto;
 
 import lombok.*;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Getter
@@ -12,6 +13,6 @@ public class FoodResponseDto {
     private String foodName;
     private char isShow;
     private char isDefault;
-    private Date registerDate;
+    private OffsetDateTime registerDate;
 
 }
