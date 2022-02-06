@@ -116,7 +116,6 @@ const SearchTextList = ({
             transferSearchText={transferSearchText}
           />
         ))}
-      <button>클릭</button>
       </tbody>
     </Table>
     </div>
