@@ -24,21 +24,26 @@ export const getFoodMntList = createAction(
   ({ foodName, isShow, asc }) => ({ foodName, isShow, asc }),
 );
 
+
 const foodMntListSaga = createRequestSaga(
   FOOD_INFO_LIST,
   adminAPI.getFoodMntList,
 );
 
-export function* foodInfoListSaga() {
+export function* getFoodInfoListSaga() {
   yield takeLatest(FOOD_INFO_LIST, foodMntListSaga);
 }
 
 const [DELETE_FOOD_INFO, DELETE_FOOD_INFO_SUCCESS, DELETE_FOOD_INFO_FAILURE] =
   createRequestActionTypes('food_mnt/DELETE_FOOD_INFO');
 
-const deleteFood = createAction(DELETE_FOOD_INFO, ({ foodNo }) => ({ foodNo }));
+export const deleteFood = createAction(DELETE_FOOD_INFO, ({ foodNo }) => ({ foodNo }));
 
 const deleteFoodSaga = createRequestSaga(DELETE_FOOD_INFO, adminAPI.deleteFood);
+
+export function* deleteFoodInfoSaga(){
+  yield takeLatest(DELETE_FOOD_INFO, deleteFoodSaga);
+}
 
 const initialState = {
   foodMntList: null,
