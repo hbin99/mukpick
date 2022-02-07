@@ -9,7 +9,7 @@ import searchMntModule, {
   changeValidateSaga,
   transferSearchTextSaga,
 } from './admin/searchMntModule';
-import foodMntModule, { deleteFoodInfoSaga, getFoodInfoListSaga } from './admin/foodMntModule';
+import foodMntModule, { deleteFoodInfoSaga, getFoodInfoListSaga, updateFoodInfoSaga } from './admin/foodMntModule';
 
 const rootReducer = combineReducers({
   loading,
@@ -26,7 +26,8 @@ function* adminSaga(){
     changeValidateSaga(),
     transferSearchTextSaga(),
     getFoodInfoListSaga(),
-    deleteFoodInfoSaga()
+    deleteFoodInfoSaga(),
+    updateFoodInfoSaga(),
   ])
 }
 

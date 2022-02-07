@@ -26,10 +26,10 @@ public class FoodMntAPI {
     }
 
     @PatchMapping("/{foodNo}")
-    public ResponseEntity<Object> modifyFoodInfo(@PathVariable Long foodNo,@RequestBody FoodUpdateRequestDto fudto){
+    public ResponseEntity<FoodResponseDto> modifyFoodInfo(@PathVariable Long foodNo,@RequestBody FoodUpdateRequestDto fudto){
         fudto.setUpFoodNo(foodNo);
+        System.out.println(fudto+"혀이");
         FoodResponseDto response = foodMntService.modifyFoodInfo(fudto);
-
         return ResponseEntity.ok(response);
     }
 

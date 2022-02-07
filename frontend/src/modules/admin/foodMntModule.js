@@ -45,6 +45,18 @@ export function* deleteFoodInfoSaga(){
   yield takeLatest(DELETE_FOOD_INFO, deleteFoodSaga);
 }
 
+
+const [UPDATE_FOOD_INFO, UPDATE_FOOD_INFO_SUCCESS, UPDATE_FOOD_INFO_FAILURE] =
+  createRequestActionTypes('food_mnt/UPDATE_FOOD_INFO');
+
+export const updateFood = createAction(UPDATE_FOOD_INFO, ({foodNo, foodData}) => ({foodNo, foodData}));
+
+const updateFoodSaga = createRequestSaga(UPDATE_FOOD_INFO, adminAPI.modifyFoodInfo);
+
+export function* updateFoodInfoSaga(){
+  yield takeLatest(UPDATE_FOOD_INFO, updateFoodSaga);
+}
+
 const initialState = {
   foodMntList: null,
   error: null,
@@ -85,6 +97,20 @@ const foodMntModule = handleActions(
       ...state,
       error,
     }),
+    [UPDATE_FOOD_INFO_SUCCESS]: (state, {payload: foodInfo}) => ({
+      ...state,
+      foodMntList : state.foodMntList.map(item => {
+        if (foodInfo.foodNo === item.foodNo){
+          item.foodName = foodInfo.foodName;
+          item.isShow = foodInfo.isShow;
+        }
+        return item;
+      })
+    }),
+    [UPDATE_FOOD_INFO_FAILURE]: (state, {payload:error}) => ({
+      ...state,
+      error
+    })
   },
   initialState,
 );

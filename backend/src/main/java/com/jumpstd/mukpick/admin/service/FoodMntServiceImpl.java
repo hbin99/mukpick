@@ -42,9 +42,8 @@ public class FoodMntServiceImpl implements FoodMntService{
 
     @Override
     public FoodResponseDto modifyFoodInfo(FoodUpdateRequestDto fudto) {
-        if(fudto.getIsShow() != 'Y' && fudto.getIsShow() != 'N') return null;
+        if(fudto.getIsShow() != 'Y' && fudto.getIsShow() != 'N' && fudto.getFoodName() == null) return null;
         int successFlag = foodMntDao.updateFoodInfo(fudto);
-        System.out.println("여기 발생!" + successFlag);
         if(successFlag == 0){
             throw new NoValidFoodNoException(ErrorCode.NO_VALID_FOOD_NO);
         }
