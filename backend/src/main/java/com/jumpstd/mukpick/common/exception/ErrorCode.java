@@ -18,6 +18,7 @@ public enum ErrorCode {
 
     // NOT FOUND : 404
     NO_VALID_FOOD_NO(HttpStatus.NOT_FOUND.value(), "유효하지 않은 음식 번호입니다."),
+    NULL_DATA(HttpStatus.NOT_FOUND.value(), "데이터를 찾을 수 없습니다."),
 
 
     // SERVER ERROR : 500

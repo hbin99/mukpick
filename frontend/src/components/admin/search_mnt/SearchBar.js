@@ -1,3 +1,4 @@
+import { memo } from 'react';
 
 const SearchBar = ({ name, searchText, onChange, onKeyDown }) => {
 
@@ -14,4 +15,4 @@ const SearchBar = ({ name, searchText, onChange, onKeyDown }) => {
   );
 };
 
-export default SearchBar;
+export default memo(SearchBar);

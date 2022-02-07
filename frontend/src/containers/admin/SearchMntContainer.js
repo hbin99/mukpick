@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import {
@@ -13,10 +13,10 @@ import SearchMnt from '../../components/admin/search_mnt/SearchMnt';
 import SearchBar from '../../components/admin/search_mnt/SearchBar';
 
 
-const SearchMntContainer = ({ location }) => {
+const SearchMntContainer = memo(({ location }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { searchTextList, error, loading, searchText,asc,start,limit,hasNext } = useSelector(
+  const { searchTextList, error, loading, searchText,asc } = useSelector(
     ({ searchMnt, loading }) => ({
       searchTextList: searchMnt.searchTextList,
       error: searchMnt.error,
@@ -29,8 +29,8 @@ const SearchMntContainer = ({ location }) => {
     }),
   );
 
-  const [bottom, setBottom] = useState(null);
-  const bottomObserver = useRef(null);
+  // const [bottom, setBottom] = useState(null);
+  // const bottomObserver = useRef(null);
 
   /* 검색 */
   useEffect(() => {
@@ -40,14 +40,14 @@ const SearchMntContainer = ({ location }) => {
     // if(hasNext == null || hasNext){
       dispatch(getSearchMntList({ searchText: q, asc}));
     // }
-  }, [dispatch, location.search ]);
+  }, [ dispatch,asc, location.search ]);
 
-  const onChange = (e) => {
+  const onChange = useCallback((e) => {
     const { value, name } = e.target;
     dispatch(changeSearchCond({ key: name, value }));
-  };
+  },[dispatch]);
 
-  const onKeyDown = (e) => {
+  const onKeyDown = useCallback((e) => {
     if (e.keyCode === 13) {
       if (searchText) {
         history.push('?q=' + searchText);
@@ -55,11 +55,14 @@ const SearchMntContainer = ({ location }) => {
         history.push('/admin/search-mnt');
       }
     }
-  };
+  },[searchText,history]);
 
-  const deleteItem = (searchNo) => {
+  const deleteItem = useCallback((searchNo) => {
     dispatch(deleteSearchText({ searchNo }));
-  };
+    if(!searchTextList.length){
+      dispatch(getSearchMntList({searchText: '', asc}));
+    }
+  },[dispatch,searchTextList.length,asc]);
 
   const changeValidDate = (searchNo, changeDate) => {
     dispatch(changeSearchValidDate({ searchNo, changeDate }));
@@ -69,17 +72,10 @@ const SearchMntContainer = ({ location }) => {
     dispatch(transferToFoodMnt({ searchNo }));
   };
 
-  /* 새로고침 시 쿼리스트링 초기화 */
-  useEffect(() => {
-    history.push('/admin/search-mnt');
-  }, [history]);
-
-
   return (
-
     <>
-      <SearchMnt
-        loading={loading}
+    <SearchMnt
+  loading={loading}
         error={error}
         searchTextList={searchTextList}
         deleteSearchText={deleteItem}
@@ -96,6 +92,6 @@ const SearchMntContainer = ({ location }) => {
       />
     </>
   );
-};
+});
 
 export default withRouter(SearchMntContainer);

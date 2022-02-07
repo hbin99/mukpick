@@ -9,12 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @DisplayName("검색관리 Service 테스트")
@@ -24,8 +23,11 @@ class SearchMntServiceTest {
     SearchMntService searchMntService;
 
     @BeforeEach
-    @DisplayName("초기화 메서드 - 데이터 2개 세팅")
+    @DisplayName("초기화 메서드 - 데이터 19개 세팅")
     public void init(){
+        // 혹시 존재할 데이터를 모두 삭제
+        searchMntService.deleteSearchTextAll();
+
         searchMntService.saveSearchText("라볶이");
         searchMntService.saveSearchText("마라탕");
         searchMntService.saveSearchText("삼계탕");
@@ -57,7 +59,7 @@ class SearchMntServiceTest {
         List<SearchResponseDto> searchList = searchMntService.findSearchList(dto);
 
         // then
-        assertThat(searchList.size()).isGreaterThanOrEqualTo(2);
+        assertThat(searchList.size()).isGreaterThanOrEqualTo(19);
     }
 
     @Test
@@ -68,7 +70,7 @@ class SearchMntServiceTest {
         // when
         SearchResponseDto searchData = searchMntService.findBySearchText("라볶이");
         // then
-//        assertEquals(searchData.getSearchText(),searchText);
+        assertEquals(searchData.getSearchText(),searchText);
     }
 
     @Test
@@ -106,7 +108,6 @@ class SearchMntServiceTest {
         Long searchNo = searchData.getSearchNo();
 
         // 변경할 날짜
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         OffsetDateTime date= OffsetDateTime.now().plusDays(90);
         SearchValidDateRequestDto dto = new SearchValidDateRequestDto(searchNo, date);
         // when
