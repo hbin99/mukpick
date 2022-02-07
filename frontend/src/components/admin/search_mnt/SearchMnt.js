@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { getFullDateFormat } from '../../../lib/utils';
 import AskModal from '../../common/AskModal';
 import ErrorMessage from '../../common/ErrorMessage';
 import SelectDateTimeModal from '../../common/SelectDateTimeModal';
 import '../../../lib/css/admin.css';
-const SearchTextItem = ({
+const SearchTextItem = memo(({
   item,
   deleteSearchText,
   changeValidDate,
@@ -17,32 +17,32 @@ const SearchTextItem = ({
 
   const { searchNo, searchText, validDate, registerDate, searchCnt } = item;
 
-  const changeShowConfirm = () => {
+  const changeShowConfirm = useCallback(() => {
     setIsShowConfirmDate(!isShowConfirmDate);
-  };
+  },[isShowConfirmDate]);
 
-  const changeShowDelete = () => {
+  const changeShowDelete = useCallback(() => {
     SetIsShowDeleteModal(!isShowDeleteModal);
-  };
+  },[isShowDeleteModal]);
 
-  const changeShowTransfer = () => {
+  const changeShowTransfer = useCallback(() => {
     SetIsShowTransferModal(!isShowTransferModal);
-  };
+  },[isShowTransferModal]);
 
-  const onConfirm = (changeDate) => {
+  const onConfirm = useCallback((changeDate) => {
     changeValidDate(searchNo, changeDate);
     changeShowConfirm();
-  };
+  },[changeShowConfirm, changeValidDate,searchNo]);
 
-  const onDelete = () => {
+  const onDelete = useCallback(() => {
     deleteSearchText(searchNo);
     changeShowDelete();
-  };
+  },[changeShowDelete, deleteSearchText, searchNo]);
 
-  const onTransfer = () => {
+  const onTransfer = useCallback(() => {
     transferSearchText(searchNo);
     changeShowTransfer();
-  };
+  },[changeShowTransfer, transferSearchText, searchNo]);
   return (
     <tr>
       <td>{searchNo}</td>
@@ -84,9 +84,9 @@ const SearchTextItem = ({
       </td>
     </tr>
   );
-};
+});
 
-const SearchTextList = ({
+const SearchTextList = memo(({
   list,
   deleteSearchText,
   changeValidDate,
@@ -116,12 +116,11 @@ const SearchTextList = ({
             transferSearchText={transferSearchText}
           />
         ))}
-      <button>클릭</button>
       </tbody>
     </Table>
     </div>
   );
-};
+});
 
 const SearchMnt = ({
   loading,
@@ -154,4 +153,4 @@ const SearchMnt = ({
   );
 };
 
-export default SearchMnt;
+export default memo(SearchMnt);
