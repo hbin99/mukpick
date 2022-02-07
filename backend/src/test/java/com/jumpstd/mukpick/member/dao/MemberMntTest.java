@@ -19,7 +19,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 @DisplayName("Test")
 class MemberMntTest {
     @Autowired
@@ -31,13 +31,13 @@ class MemberMntTest {
     @Autowired
     MailService mailService;
 
-    @BeforeEach
+   /* @BeforeEach
     @DisplayName("Member insert")
     public void param(){
         MemberRegisteDto dto = new MemberRegisteDto();
         dto.setUserId("test2");
         dto.setAge(23);
-        dto.setEmail("test123@gmail.com");
+        dto.setEmail("hyebin9612@gmail.com");
         dto.setPassword("test123");
         dto.setProfileImg("");
         dto.setPhone("010-2222-6666");
@@ -46,12 +46,14 @@ class MemberMntTest {
         dto.setUserName("테스트2");
 
         mapper.register(dto);
-    }
+        MemberInfoDto memberInfoDto = memberService.findByUserData(dto.getUserId());
+        System.out.println(memberInfoDto.toString());
+    }*/
 
     @Test
     @DisplayName("id check")
     public void findByUser(){
-        String user_id ="test2";
+        String user_id ="test";
         int result = memberService.findByUser(user_id);
         assertThat(result).isEqualTo(1);
     }
@@ -59,12 +61,12 @@ class MemberMntTest {
     @DisplayName("register > mail send ")
     public void registerSendMail(){
         MemberRegisteDto dto = new MemberRegisteDto();
-        dto.setUserId("test");
+        dto.setUserId("test2");
         dto.setAge(23);
-        dto.setEmail("dbseoyyyy@gmail.com");
+        dto.setEmail("hyebin9612@gmail.com");
         dto.setPassword("dbseoyyyy");
         dto.setProfileImg("");
-        dto.setPhone("010-1111-2222");
+        dto.setPhone("010-3333-2222");
         dto.setGender('F');
         dto.setRoleType(RollType.BEFORE_SING_UP_USER.getValue());
         dto.setUserName("테스트");
@@ -72,6 +74,8 @@ class MemberMntTest {
         int result = memberService.register(dto);
 
         assertThat(result).isEqualTo(1);
+        MemberInfoDto memberInfoDto = memberService.findByUserData(dto.getUserId());
+        System.out.println(">>>>>>>>> "+memberInfoDto.toString());
     }
 
     @Test
@@ -79,14 +83,14 @@ class MemberMntTest {
     public void register() {
         // given
         MemberInfoDto dto = new MemberInfoDto();
-        dto.setUserId("test");
+        dto.setUserId("test2");
         dto.setRoleType(RollType.USER.getValue());
         dto.setAuthKey("");
         // when
         memberService.update(dto);
         // then
         int result = memberService.findByUser(dto.getUserId());
-        assertThat(result).isEqualTo(1);
+        System.out.println(">>>>>>>>> "+result);
 
     }
     @Test
@@ -95,7 +99,7 @@ class MemberMntTest {
         // given
         SearchUserIdDto dto = new SearchUserIdDto();
         dto.setUserName("테스트");
-        dto.setEmail("dbseoyyyy@gmail.com");
+        dto.setEmail("hyebin9612@gmail.com");
         dto.setPhone("010-1111-2222");
         // when
         String result= memberService.findByUserId(dto);
@@ -108,11 +112,12 @@ class MemberMntTest {
     public void passwordFind() {
         // given
         SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
-        searchVaildMemberDto.setUserId("test");
-        searchVaildMemberDto.setEmail("dbseoyyyy@gmail.com");
+        searchVaildMemberDto.setUserId("test2");
+        searchVaildMemberDto.setEmail("hyebin9612@gmail.com");
         // when
         int result = memberService.passwordFind(searchVaildMemberDto);
         // then
+        System.out.println(">>>>>>>>> "+result);
         assertThat(result).isEqualTo(1);
     }
     @Test
@@ -121,14 +126,14 @@ class MemberMntTest {
         // given
         MemberInfoDto dto = new MemberInfoDto();
         dto.setUserId("test");
-        dto.setEmail("dbseoyyyy12@gmail.com");
-        dto.setPhone("010-1234-5678");
+        //dto.setEmail("hyebin9612@gmail.com");
+        //dto.setPhone("010-1234-5678");
         dto.setAge(13);
         // when
         memberService.update(dto);
         // then
         MemberInfoDto memberInfoDto = memberService.findByUserData(dto.getUserId());
-        assertThat(memberInfoDto).isNull();
+        System.out.println(">>>>>>>>> "+memberInfoDto.toString());
 
     }
     @Test

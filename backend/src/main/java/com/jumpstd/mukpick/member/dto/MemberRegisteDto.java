@@ -14,8 +14,8 @@ public class MemberRegisteDto {
     private String phone;
     private String profileImg;
     private String email;
-    private char roleType;
+    private Integer roleType;
     private char gender;
-    private int age;
+    private Integer age;
 }
 

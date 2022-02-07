@@ -78,7 +78,6 @@ public class MemberServiceImpl implements MemberService{
             sendMailMemberDto.setEmail(searchVaildMemberDto.getEmail());
             sendMailMemberDto.setFlag("PassSend");
             sendMailMemberDto.setUserId(searchVaildMemberDto.getUserId());
-            System.out.println(memberMailSend(sendMailMemberDto));
             if(!memberMailSend(sendMailMemberDto)){
                 return 0;
             }

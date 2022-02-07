@@ -44,29 +44,29 @@
 
     <update id="update" parameterType="com.jumpstd.mukpick.member.dto.MemberInfoDto" >
         UPDATE TB_USER
-        <trim prefix="SET" suffixOverrides=",">
-            <if test='password != null '>
-                PASSWORD = #{password},
-            </if>
-            <if test='phone != null '>
-              PHONE = #{phone},
-            </if>
-            <if test='profileImg != null '>
-              PROFILE_IMG =#{profileImg},
-            </if>
-            <if test='email != null '>
-              EMAIL = #{email},
-            </if>
-            <if test='age != null '>
-              AGE = #{age},
-            </if>
-            <if test='roleType != null '>
-                ROLE_TYPE = #{roleType},
-            </if>
-            <if test=' authKey != null '>
-                AUTH_KEY = #{authKey},
-            </if>
-        </trim>
+        SET
+        <if test='password != null '>
+            PASSWORD = #{password},
+        </if>
+        <if test='phone != null '>
+          PHONE = #{phone},
+        </if>
+        <if test='profileImg != null '>
+          PROFILE_IMG =#{profileImg},
+        </if>
+        <if test='email != null '>
+          EMAIL = #{email},
+        </if>
+        <if test='age != null '>
+          AGE = #{age},
+        </if>
+        <if test='roleType != null '>
+            ROLE_TYPE = #{roleType},
+        </if>
+        <if test=' authKey != null '>
+            AUTH_KEY = #{authKey},
+        </if>
+        UPDATE_DATE = now()
         WHERE USER_ID = #{userId}
     </update>
 

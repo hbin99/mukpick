@@ -3,7 +3,9 @@ package com.jumpstd.mukpick.member.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Setter
 @Getter
 @RequiredArgsConstructor
@@ -14,10 +16,13 @@ public class MemberInfoDto {
     private String phone;
     private String profileImg;
     private String email;
-    private char roleType;
+    private Integer roleType;
     private char gender;
-    private int age;
+    private Integer age;
     private String authKey;
+
+
+
 
 }
 

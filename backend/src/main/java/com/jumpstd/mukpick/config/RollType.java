@@ -6,19 +6,19 @@ public enum RollType {
     // 3 : 탈퇴유저
     // 4 : 정지유저
     // 5 : 회원가입 전단계 (이메일 확인 후 role_type 2로 변경)
-    ADMIN('1'),
-    USER('2'),
-    DROP_USER('3'),
-    STOP_USER('4'),
-    BEFORE_SING_UP_USER('5');
+    ADMIN(1),
+    USER(2),
+    DROP_USER(3),
+    STOP_USER(4),
+    BEFORE_SING_UP_USER(5);
 
-    private final char value;
+    private final Integer value;
 
-    RollType(char i) {
+    RollType(Integer i) {
         this.value = i;
     }
 
-    public char getValue(){
+    public Integer getValue(){
         return value;
     }
 }

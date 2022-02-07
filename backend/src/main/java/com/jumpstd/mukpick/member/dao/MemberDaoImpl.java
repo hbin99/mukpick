@@ -20,7 +20,7 @@ public class MemberDaoImpl implements MemberDao{
     }
     @Override
     public int update(MemberInfoDto memberInfoDto){
-        return MemberMapper.update(memberInfoDto);
+       return MemberMapper.update(memberInfoDto);
     }
 
     @Override
