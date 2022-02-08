@@ -1,23 +1,18 @@
-import styled from 'styled-components';
-
-const Input = styled.input`
-  margin-bottom: 10px;
-`;
-
+import { memo } from 'react';
 
 const SearchBar = ({ name, searchText, onChange, onKeyDown }) => {
 
   return (
-    <>
-      <Input
+    <div className={"search_input"}>
+      <input
         name={name}
         value={searchText}
         onChange={onChange}
         onKeyDown={onKeyDown}
         placeholder={'검색어를 입력 후 엔터를 눌러주세요.'}
       />
-    </>
+    </div>
   );
 };
 
-export default SearchBar;
+export default memo(SearchBar);

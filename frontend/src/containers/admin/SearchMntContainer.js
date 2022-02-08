@@ -1,34 +1,53 @@
-import { useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import {
   changeSearchCond,
   changeSearchValidDate,
   deleteSearchText,
-  searchMntList,
+  getSearchMntList,
   transferToFoodMnt,
-} from '../../modules/admin/searchMnt';
+} from '../../modules/admin/searchMntModule';
 import { withRouter, useHistory } from 'react-router-dom';
 import SearchMnt from '../../components/admin/search_mnt/SearchMnt';
 import SearchBar from '../../components/admin/search_mnt/SearchBar';
-const SearchMntContainer = ({ location }) => {
+
+
+const SearchMntContainer = memo(({ location }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { searchTextList, error, loading, searchText } = useSelector(
+  const { searchTextList, error, loading, searchText,asc } = useSelector(
     ({ searchMnt, loading }) => ({
       searchTextList: searchMnt.searchTextList,
       error: searchMnt.error,
+      searchText: searchMnt.searchCond.searchText,
+      asc: searchMnt.searchCond.asc,
+      start: searchMnt.searchCond.start,
+      limit: searchMnt.searchCond.limit,
+      hasNext: searchMnt.hasNext,
       loading: loading['search_mnt/SEARCH_TEXT_LIST'],
-      searchText: searchMnt.searchText,
     }),
   );
 
-  const onChange = (e) => {
+  // const [bottom, setBottom] = useState(null);
+  // const bottomObserver = useRef(null);
+
+  /* 검색 */
+  useEffect(() => {
+    let { q } = qs.parse(location.search, {
+      ignoreQueryPrefix: true,
+    });
+    // if(hasNext == null || hasNext){
+      dispatch(getSearchMntList({ searchText: q, asc}));
+    // }
+  }, [ dispatch,asc, location.search ]);
+
+  const onChange = useCallback((e) => {
     const { value, name } = e.target;
     dispatch(changeSearchCond({ key: name, value }));
-  };
+  },[dispatch]);
 
-  const onKeyDown = (e) => {
+  const onKeyDown = useCallback((e) => {
     if (e.keyCode === 13) {
       if (searchText) {
         history.push('?q=' + searchText);
@@ -36,11 +55,14 @@ const SearchMntContainer = ({ location }) => {
         history.push('/admin/search-mnt');
       }
     }
-  };
+  },[searchText,history]);
 
-  const deleteItem = (searchNo) => {
+  const deleteItem = useCallback((searchNo) => {
     dispatch(deleteSearchText({ searchNo }));
-  };
+    if(!searchTextList.length){
+      dispatch(getSearchMntList({searchText: '', asc}));
+    }
+  },[dispatch,searchTextList.length,asc]);
 
   const changeValidDate = (searchNo, changeDate) => {
     dispatch(changeSearchValidDate({ searchNo, changeDate }));
@@ -50,22 +72,10 @@ const SearchMntContainer = ({ location }) => {
     dispatch(transferToFoodMnt({ searchNo }));
   };
 
-  /* 새로고침 시 쿼리스트링 초기화 */
-  useEffect(() => {
-    history.push('/admin/search-mnt');
-  }, [history]);
-
-  useEffect(() => {
-    const { q, sort } = qs.parse(location.search, {
-      ignoreQueryPrefix: true,
-    });
-
-    dispatch(searchMntList({ searchText: q, asc: sort }));
-  }, [dispatch, location.search]);
   return (
     <>
-      <SearchMnt
-        loading={loading}
+    <SearchMnt
+  loading={loading}
         error={error}
         searchTextList={searchTextList}
         deleteSearchText={deleteItem}
@@ -82,6 +92,6 @@ const SearchMntContainer = ({ location }) => {
       />
     </>
   );
-};
+});
 
 export default withRouter(SearchMntContainer);

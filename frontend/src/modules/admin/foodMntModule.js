@@ -24,21 +24,38 @@ export const getFoodMntList = createAction(
   ({ foodName, isShow, asc }) => ({ foodName, isShow, asc }),
 );
 
+
 const foodMntListSaga = createRequestSaga(
   FOOD_INFO_LIST,
   adminAPI.getFoodMntList,
 );
 
-export function* foodInfoListSaga() {
+export function* getFoodInfoListSaga() {
   yield takeLatest(FOOD_INFO_LIST, foodMntListSaga);
 }
 
 const [DELETE_FOOD_INFO, DELETE_FOOD_INFO_SUCCESS, DELETE_FOOD_INFO_FAILURE] =
   createRequestActionTypes('food_mnt/DELETE_FOOD_INFO');
 
-const deleteFood = createAction(DELETE_FOOD_INFO, ({ foodNo }) => ({ foodNo }));
+export const deleteFood = createAction(DELETE_FOOD_INFO, ({ foodNo }) => ({ foodNo }));
 
 const deleteFoodSaga = createRequestSaga(DELETE_FOOD_INFO, adminAPI.deleteFood);
+
+export function* deleteFoodInfoSaga(){
+  yield takeLatest(DELETE_FOOD_INFO, deleteFoodSaga);
+}
+
+
+const [UPDATE_FOOD_INFO, UPDATE_FOOD_INFO_SUCCESS, UPDATE_FOOD_INFO_FAILURE] =
+  createRequestActionTypes('food_mnt/UPDATE_FOOD_INFO');
+
+export const updateFood = createAction(UPDATE_FOOD_INFO, ({foodNo, foodData}) => ({foodNo, foodData}));
+
+const updateFoodSaga = createRequestSaga(UPDATE_FOOD_INFO, adminAPI.modifyFoodInfo);
+
+export function* updateFoodInfoSaga(){
+  yield takeLatest(UPDATE_FOOD_INFO, updateFoodSaga);
+}
 
 const initialState = {
   foodMntList: null,
@@ -46,11 +63,13 @@ const initialState = {
   searchCond: {
     foodName: '',
     isShow: null,
-    asc: null,
+    asc: true,
+    start: 0,
+    end: 10
   },
 };
 
-const foodMnt = handleActions(
+const foodMntModule = handleActions(
   {
     [CHANGE_SEARCH_COND]: (state, { payload: { key, value } }) => ({
       ...state,
@@ -67,8 +86,33 @@ const foodMnt = handleActions(
       ...state,
       error,
     }),
+
+    [DELETE_FOOD_INFO_SUCCESS]: (state, { payload: foodNo }) => ({
+      ...state,
+      foodMntList: state.foodMntList.filter(
+        (item) => item.foodNo !== foodNo,
+      ),
+    }),
+    [DELETE_FOOD_INFO_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      error,
+    }),
+    [UPDATE_FOOD_INFO_SUCCESS]: (state, {payload: foodInfo}) => ({
+      ...state,
+      foodMntList : state.foodMntList.map(item => {
+        if (foodInfo.foodNo === item.foodNo){
+          item.foodName = foodInfo.foodName;
+          item.isShow = foodInfo.isShow;
+        }
+        return item;
+      })
+    }),
+    [UPDATE_FOOD_INFO_FAILURE]: (state, {payload:error}) => ({
+      ...state,
+      error
+    })
   },
   initialState,
 );
 
-export default foodMnt;
+export default foodMntModule;

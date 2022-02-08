@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { getFullDateFormat } from '../../../lib/utils';
 import AskModal from '../../common/AskModal';
 import ErrorMessage from '../../common/ErrorMessage';
 import SelectDateTimeModal from '../../common/SelectDateTimeModal';
-
-const SearchTextItem = ({
+import '../../../lib/css/admin.css';
+const SearchTextItem = memo(({
   item,
   deleteSearchText,
   changeValidDate,
@@ -17,32 +17,32 @@ const SearchTextItem = ({
 
   const { searchNo, searchText, validDate, registerDate, searchCnt } = item;
 
-  const changeShowConfirm = () => {
+  const changeShowConfirm = useCallback(() => {
     setIsShowConfirmDate(!isShowConfirmDate);
-  };
+  },[isShowConfirmDate]);
 
-  const changeShowDelete = () => {
+  const changeShowDelete = useCallback(() => {
     SetIsShowDeleteModal(!isShowDeleteModal);
-  };
+  },[isShowDeleteModal]);
 
-  const changeShowTransfer = () => {
+  const changeShowTransfer = useCallback(() => {
     SetIsShowTransferModal(!isShowTransferModal);
-  };
+  },[isShowTransferModal]);
 
-  const onConfirm = (changeDate) => {
+  const onConfirm = useCallback((changeDate) => {
     changeValidDate(searchNo, changeDate);
     changeShowConfirm();
-  };
+  },[changeShowConfirm, changeValidDate,searchNo]);
 
-  const onDelete = () => {
+  const onDelete = useCallback(() => {
     deleteSearchText(searchNo);
     changeShowDelete();
-  };
+  },[changeShowDelete, deleteSearchText, searchNo]);
 
-  const onTransfer = () => {
+  const onTransfer = useCallback(() => {
     transferSearchText(searchNo);
     changeShowTransfer();
-  };
+  },[changeShowTransfer, transferSearchText, searchNo]);
   return (
     <tr>
       <td>{searchNo}</td>
@@ -84,16 +84,18 @@ const SearchTextItem = ({
       </td>
     </tr>
   );
-};
+});
 
-const SearchTextList = ({
+const SearchTextList = memo(({
   list,
   deleteSearchText,
   changeValidDate,
   transferSearchText,
 }) => {
+
   return (
-    <Table bordered responsive="md" hover>
+    <div className={"grid_box"}>
+    <Table bordered responsive="md" hover >
       <thead>
         <tr>
           <th>No.</th>
@@ -105,10 +107,10 @@ const SearchTextList = ({
         </tr>
       </thead>
       <tbody>
-        {list.map((item) => (
+        {list.map((item, index) => (
           <SearchTextItem
             item={item}
-            key={item.searchNo}
+            key={index}
             deleteSearchText={deleteSearchText}
             changeValidDate={changeValidDate}
             transferSearchText={transferSearchText}
@@ -116,8 +118,9 @@ const SearchTextList = ({
         ))}
       </tbody>
     </Table>
+    </div>
   );
-};
+});
 
 const SearchMnt = ({
   loading,
@@ -131,21 +134,23 @@ const SearchMnt = ({
   if (error) {
     return <ErrorMessage error={error} />;
   }
-
   return (
     <>
-      <h1>검색어 관리</h1>
+      <div className={"page_title"}>
+        <h1>검색어 관리</h1>
+      </div>
       {searchBar}
-      {!loading && searchTextList && !error && (
-        <SearchTextList
-          list={searchTextList}
-          deleteSearchText={deleteSearchText}
-          changeValidDate={changeValidDate}
-          transferSearchText={transferSearchText}
-        />
-      )}
+        {!loading && searchTextList && !error && (
+          <SearchTextList
+            list={searchTextList}
+            deleteSearchText={deleteSearchText}
+            changeValidDate={changeValidDate}
+            transferSearchText={transferSearchText}
+          />
+        )}
+
     </>
   );
 };
 
-export default SearchMnt;
+export default memo(SearchMnt);

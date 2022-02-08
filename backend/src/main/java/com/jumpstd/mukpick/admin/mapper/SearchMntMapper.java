@@ -24,4 +24,6 @@ public interface SearchMntMapper {
     int changeValidDate(SearchValidDateRequestDto searchValidDateRequestDto);
     
     int transferToFood(Long searchNo);
+
+    int countSearchList(SearchRequestDto searchRequestDTO);
 }

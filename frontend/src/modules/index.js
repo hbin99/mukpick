@@ -3,33 +3,48 @@ import { all } from 'redux-saga/effects';
 import loading from './loading';
 import findUser, { memberSaga } from './member/findUser';
 import user,{loginSaga} from './member/login';
-import searchMnt, {
+import searchMntModule, {
   searchMntSaga,
   deleteSearchTextSaga,
   changeValidateSaga,
   transferSearchTextSaga,
-} from './admin/searchMnt';
-import foodMnt, { foodInfoListSaga } from './admin/foodMnt';
+} from './admin/searchMntModule';
+import foodMntModule, { deleteFoodInfoSaga, getFoodInfoListSaga, updateFoodInfoSaga } from './admin/foodMntModule';
 
 const rootReducer = combineReducers({
   loading,
-  searchMnt,
-  foodMnt,
+  searchMnt: searchMntModule,
+  foodMnt: foodMntModule,
   member: findUser,
   user
 });
 
-export function* rootSaga() {
+function* adminSaga(){
   yield all([
     searchMntSaga(),
     deleteSearchTextSaga(),
     changeValidateSaga(),
     transferSearchTextSaga(),
-    foodInfoListSaga(),
-    memberSaga(),
-    loginSaga()
+    getFoodInfoListSaga(),
+    deleteFoodInfoSaga(),
+    updateFoodInfoSaga(),
+  ])
+}
 
+function* userSaga(){
+  yield all([
+    loginSaga(),
+    memberSaga(),
+  ])
+}
+
+export function* rootSaga() {
+  yield all([
+    adminSaga(),
+    memberSaga()
   ]);
 }
+
+
 
 export default rootReducer;

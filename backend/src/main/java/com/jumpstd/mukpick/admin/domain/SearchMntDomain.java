@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Getter
@@ -14,9 +16,10 @@ import java.util.Date;
 public class SearchMntDomain {
     private Long searchNo;
     private String searchText;
-    private Date validDate;
-    private Date registerDate;
+    private OffsetDateTime validDate;
+    private OffsetDateTime registerDate;
     private Long searchCnt;
+
 
     public SearchResponseDto getSearchMntDto(){
         return new SearchResponseDto(
@@ -24,6 +27,7 @@ public class SearchMntDomain {
                 , this.searchText
                 , this.validDate
                 , this.registerDate
-                , searchCnt);
+                , searchCnt
+                , null);
         }
 }

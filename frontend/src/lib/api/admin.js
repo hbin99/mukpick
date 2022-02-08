@@ -2,10 +2,13 @@ import client from './client';
 import qs from 'qs';
 
 /* 검색관리 - 검색어 리스트 조회 */
-export const getSearchMntList = ({ searchText, sort }) => {
+export const getSearchMntList = ({ searchText, sort,asc, start, limit }) => {
   const queryString = qs.stringify({
     searchText,
     sort,
+    asc,
+    start,
+    limit
   });
   return client.get(`/api/admin/search?${queryString}`);
 };
@@ -39,3 +42,7 @@ export const getFoodMntList = ({ foodName, isShow, sort }) => {
 export const deleteFood = ({ foodNo }) => {
   return client.delete(`/api/admin/food/${foodNo}`);
 };
+
+export const modifyFoodInfo = ({foodNo,foodData}) => {
+  return client.patch(`/api/admin/food/${foodNo}`,foodData);
+}

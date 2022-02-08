@@ -58,9 +58,11 @@ class MemberMntTest {
         String user_id ="test";
         SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
         searchVaildMemberDto.setUserId(user_id);
-        Map<String, Object> resultMap = memberService.checkUserId(searchVaildMemberDto);
 
-        //assertThat(chk).isNotZero();
+//        int chk = memberService.checkUserId(searchVaildMemberDto);
+
+//        System.out.println(chk);
+
     }
     @Test
     @DisplayName("회원가입 신청 후 메일 전송")
