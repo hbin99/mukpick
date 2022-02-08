@@ -3,13 +3,11 @@
 
 ## 👪프로젝트 멤버
 
-[고일혁](https://github.com/koilhyuk)
-
 [김서영](https://github.com/seoyyyy)
 
 [김혜빈](https://github.com/hbin99)
 
-[신수연](https://github.com/rma1057)
+[배소현](https://github.com/baesohyun)
 
 ## 🍍기능리스트
 
