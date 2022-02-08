@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jumpstd.mukpick.admin.mapper.CodeMntMapper">
+    <select id="findList" resultType="com.jumpstd.mukpick.admin.dto.code.CodeResponseDto" parameterType="String">
+        SELECT ROW_NUMBER() OVER (ORDER BY GROUP_TYPE) AS CODE_NO
+                , GROUP_TYPE
+        FROM TB_CODE
+        WHERE 1=1
+        <if test="groupType!=null and groupType !=''">
+            AND GROUP_TYPE LIKE '%' || #{groupType} || '%'
+        </if>
+        GROUP BY GROUP_TYPE
+    </select>
+
+    <select id="findByCodeDetail" resultType="com.jumpstd.mukpick.admin.dto.code.CodeResponseDto" parameterType="String">
+        SELECT
+                CODE_NO
+                , CODE_NAME
+                , GROUP_TYPE
+        FROM TB_CODE
+        WHERE 1=1
+            AND GROUP_TYPE = #{groupType}
+        ORDER BY CODE_NAME
+    </select>
+
+    <insert id="insert" parameterType="com.jumpstd.mukpick.admin.dto.code.CodeRequestDto">
+        INSERT INTO TB_CODE( CODE_NAME, GROUP_TYPE ) VALUES (#{code_name} , #{group_type})
+    </insert>
+
+    <delete id="delete" parameterType="Long">
+        DELETE FROM TB_CODE
+        WHERE CODE_NO = #{codeNo}
+    </delete>
+
+    <update id="update" parameterType="com.jumpstd.mukpick.admin.dto.code.CodeUpdateRequestDto" >
+        UPDATE TB_CODE
+        SET CODE_NAME = #{codeName}
+        WHERE CODE_NO = #{codeNo} AND GROUP_TYPE = #{group_type}
+    </update>
+</mapper>
