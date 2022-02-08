@@ -5,6 +5,8 @@ import com.jumpstd.mukpick.admin.domain.SearchMntDomain;
 import com.jumpstd.mukpick.admin.dto.SearchRequestDto;
 import com.jumpstd.mukpick.admin.dto.SearchResponseDto;
 import com.jumpstd.mukpick.admin.dto.SearchValidDateRequestDto;
+import com.jumpstd.mukpick.admin.exception.NullDataException;
+import com.jumpstd.mukpick.common.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,11 +71,12 @@ public class SearchMntServiceImpl implements SearchMntService{
 
     @Override
     public SearchResponseDto changeValidDate(SearchValidDateRequestDto dto) {
+
         int successFlag = searchMntDao.changeValidDate(dto);
+        if(successFlag == 0) throw new NullDataException(ErrorCode.NULL_DATA);
+
         SearchMntDomain searchData = searchMntDao.findBySearchNo(dto.getSearchNo());
-        if(successFlag == 0 || searchData == null){
-            return null;
-        }
+
         return searchData.getSearchMntDto();
 
     }
@@ -81,12 +84,12 @@ public class SearchMntServiceImpl implements SearchMntService{
     @Override
     public int transferToFood(Long searchNo) {
         SearchMntDomain searchData = searchMntDao.findBySearchNo(searchNo);
-        if(searchData != null){
-            int flag = searchMntDao.transferToFood(searchNo);
-            searchMntDao.deleteOne(searchNo);
-            return flag;
-        }
-        return 0;
+
+        if(searchData == null) throw new NullDataException(ErrorCode.NULL_DATA);
+
+        int flag = searchMntDao.transferToFood(searchNo);
+        searchMntDao.deleteOne(searchNo);
+        return flag;
     }
 
     public Boolean hasNext(SearchRequestDto searchRequestDTO){

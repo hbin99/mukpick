@@ -6,6 +6,7 @@ import com.jumpstd.mukpick.admin.dto.FoodUpdateRequestDto;
 import com.jumpstd.mukpick.admin.service.FoodMntService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,20 +26,19 @@ public class FoodMntAPI {
     }
 
     @PatchMapping("/{foodNo}")
-    public ResponseEntity<Object> modifyFoodInfo(@PathVariable Long foodNo,@RequestBody FoodUpdateRequestDto fudto){
+    public ResponseEntity<FoodResponseDto> modifyFoodInfo(@PathVariable Long foodNo,@RequestBody FoodUpdateRequestDto fudto){
         fudto.setUpFoodNo(foodNo);
+        System.out.println(fudto+"혀이");
         FoodResponseDto response = foodMntService.modifyFoodInfo(fudto);
-
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{foodNo}")
-    public ResponseEntity<String> deleteFoodInfo(@PathVariable Long foodNo){
+    public ResponseEntity deleteFoodInfo(@PathVariable Long foodNo){
         int successFlag = foodMntService.deleteFoodInfo(foodNo);
-
         if (successFlag == 0){
-            return ResponseEntity.badRequest().body("삭제에 실패했습니다. 유효하지 않은 음식입니다.");
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok("삭제 성공했습니다.");
+        return ResponseEntity.ok(foodNo);
     }
 }

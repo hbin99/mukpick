@@ -9,7 +9,7 @@ import searchMntModule, {
   changeValidateSaga,
   transferSearchTextSaga,
 } from './admin/searchMntModule';
-import foodMntModule, { foodInfoListSaga } from './admin/foodMntModule';
+import foodMntModule, { deleteFoodInfoSaga, getFoodInfoListSaga, updateFoodInfoSaga } from './admin/foodMntModule';
 
 const rootReducer = combineReducers({
   loading,
@@ -19,17 +19,32 @@ const rootReducer = combineReducers({
   user
 });
 
-export function* rootSaga() {
+function* adminSaga(){
   yield all([
     searchMntSaga(),
     deleteSearchTextSaga(),
     changeValidateSaga(),
     transferSearchTextSaga(),
-    foodInfoListSaga(),
-    memberSaga(),
-    loginSaga()
+    getFoodInfoListSaga(),
+    deleteFoodInfoSaga(),
+    updateFoodInfoSaga(),
+  ])
+}
 
+function* userSaga(){
+  yield all([
+    loginSaga(),
+    memberSaga(),
+  ])
+}
+
+export function* rootSaga() {
+  yield all([
+    adminSaga(),
+    memberSaga()
   ]);
 }
+
+
 
 export default rootReducer;

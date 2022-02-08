@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import FoodMnt from '../../components/admin/food_mnt/FoodMnt';
 import SearchBar from '../../components/admin/search_mnt/SearchBar';
-import { changeSearchCond, getFoodMntList } from '../../modules/admin/foodMntModule';
+import { changeSearchCond, deleteFood, getFoodMntList, updateFood } from '../../modules/admin/foodMntModule';
 import qs from 'qs';
 import { useHistory, withRouter } from 'react-router';
 
@@ -26,8 +26,25 @@ const FoodMntContainer = ({ location }) => {
   };
 
   const deleteItem = (foodNo) => {
-    console.log(foodNo);
+    dispatch(deleteFood({foodNo}));
   };
+
+  const updateItem = (foodNo, updateInfo, value) => {
+    const foodData ={};
+    switch (updateInfo) {
+      case 'isShow':
+        foodData['isShow'] = value;
+        break;
+      case 'foodName':
+        console.log()
+        foodData['foodName'] = value;
+        break;
+
+      default:
+        break;
+    }
+    dispatch(updateFood({foodNo,foodData}));
+  }
 
   const onKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -59,6 +76,7 @@ const FoodMntContainer = ({ location }) => {
         foodMntList={foodMntList}
         loading={loading}
         error={error}
+        updateFoodInfo={updateItem}
         deleteFoodInfo={deleteItem}
       />
     </>
