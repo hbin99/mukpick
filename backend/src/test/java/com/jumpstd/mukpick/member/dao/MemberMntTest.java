@@ -9,21 +9,19 @@ import com.jumpstd.mukpick.member.dto.SearchVaildAuthMemberDto;
 import com.jumpstd.mukpick.member.dto.SearchVaildMemberDto;
 import com.jumpstd.mukpick.member.mapper.MemberMapper;
 import com.jumpstd.mukpick.member.service.MemberService;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 @DisplayName("Test")
 class MemberMntTest {
     @Autowired
@@ -35,7 +33,7 @@ class MemberMntTest {
     @Autowired
     MailService mailService;
 
-    @BeforeEach
+    /*@BeforeEach
     @DisplayName("Member insert")
     public void param(){
         MemberDto dto = new MemberDto();
@@ -50,7 +48,7 @@ class MemberMntTest {
         dto.setUserName("테스트");
 
         mapper.register(dto);
-    }
+    }*/
 
     @Test
     @DisplayName("id check")
@@ -58,19 +56,18 @@ class MemberMntTest {
         String user_id ="test";
         SearchVaildMemberDto searchVaildMemberDto = new SearchVaildMemberDto();
         searchVaildMemberDto.setUserId(user_id);
-        int chk = memberService.checkUserId(searchVaildMemberDto);
+//        int chk = memberService.checkUserId(searchVaildMemberDto);
 
-        System.out.println(chk);
-        assertThat(chk).isNotZero();
+//        System.out.println(chk);
+        //assertThat(chk).isNotZero();
     }
     @Test
     @DisplayName("회원가입 신청 후 메일 전송")
     public void registerSendMail(){
         MemberDto dto = new MemberDto();
-        dto.setUserId("tjdus1994");
+        dto.setUserId("test2");
         dto.setAge(23);
         dto.setEmail("dbseoyyyy@gmail.com");
-       // dto.setEmail("hyebin9612@gmail.com");
         dto.setPassword("test123");
         dto.setProfileImg("");
         dto.setPhone("010-2222-6666");
@@ -92,6 +89,7 @@ class MemberMntTest {
         MemberDto memberDto = new MemberDto();
         memberDto.setUserId("test2");
         memberDto.setRoleType(RollType.USER.getValue());
+        memberDto.setAuthKey("");
         // when
         memberService.update(memberDto);
         // then
@@ -170,17 +168,18 @@ class MemberMntTest {
     @Test
     public void testest(){
 
-       /* MemberDto dto = new MemberDto();
-        dto.setUser_id("test1");
+        MemberDto dto = new MemberDto();
+        dto.setUserId("test2");
         dto.setAge(23);
-        dto.setEmail("test1@gmail.com");
+        dto.setEmail("dbseoyyyy@gmail.com");
         dto.setPassword("test123");
-        dto.setProfile_img("");
-        dto.setPhone("010-1111-1111");
+        dto.setProfileImg("");
+        dto.setPhone("010-2222-6666");
         dto.setGender('F');
-        dto.setRole_type('2');
-        dto.setUser_name("테스트");*/
-        MailDto mailDto = new MailDto();
+        dto.setRoleType(RollType.BEFORE_SING_UP_USER.getValue());
+        dto.setUserName("테스트");
+
+        /*MailDto mailDto = new MailDto();
         try {
             mailDto.setTitle("테스트 메일입니다.");
             mailDto.setContext("테스트 메일입니다.");
@@ -189,8 +188,9 @@ class MemberMntTest {
             mailService.mailSend(mailDto);
         } catch (MessagingException e) {
             e.printStackTrace();
-        }
-        // System.out.println(mapper.register(dto));
+        }*/
+        memberService.register(dto);
+         System.out.println("");
 
     }
 

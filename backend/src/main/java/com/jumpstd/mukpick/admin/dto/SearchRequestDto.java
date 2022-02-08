@@ -1,17 +1,13 @@
 package com.jumpstd.mukpick.admin.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @RequiredArgsConstructor
-@Getter @Setter
-@ToString
+@Data
 public class SearchRequestDto {
     private Long searchNo;
     private String searchText;
     private int start;
-    private int end;
+    private int limit;
     private boolean asc;
 }

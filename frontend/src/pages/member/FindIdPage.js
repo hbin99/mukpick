@@ -1,5 +1,13 @@
+import FindUserPageContainer from '../../containers/member/FindUserPageContainer';
+import HeaderContainer from "../../containers/common/HeaderContainer";
+
 const FindIdPage = () => {
-    return <>아이디 찾기 페이지</>
+    return (
+        <>
+            <HeaderContainer/>
+            <FindUserPageContainer type = "findId"/>
+        </>
+      );
 }
 
 export default FindIdPage;

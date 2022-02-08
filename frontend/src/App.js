@@ -1,4 +1,5 @@
 import { Route } from 'react-router-dom';
+import FoodMntPage from './pages/admin/FoodMntPage';
 import SearchMntPage from './pages/admin/SearchMntPage';
 import AdminMainPage from './pages/main/AdminMainPage';
 import MainPage from './pages/main/MainPage';
@@ -23,6 +24,7 @@ function App() {
       {/* 관리자 */}
       <Route component={AdminMainPage} path="/admin" exact />
       <Route component={SearchMntPage} path="/admin/search-mnt" />
+      <Route component={FoodMntPage} path="/admin/food-mnt" />
     </>
   );
 }

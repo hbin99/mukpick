@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Getter
@@ -13,11 +15,12 @@ import java.util.Date;
 public class SearchResponseDto {
     private Long searchNo;
     private String searchText;
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Date validDate;
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Date registerDate;
+    private OffsetDateTime validDate;
+    private OffsetDateTime registerDate;
     private Long searchCnt;
+    private Boolean hasNext;
 
-
+    public void changeHasNext(Boolean hasNext) {
+        this.hasNext = hasNext;
+    }
 }

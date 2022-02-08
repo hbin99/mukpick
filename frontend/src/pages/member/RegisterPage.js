@@ -1,5 +1,13 @@
+import HeaderContainer from "../../containers/common/HeaderContainer";
+import RegisterPageContainer from "../../containers/member/RegisterPageContainer";
+
 const RegisterPage = () => {
-    return <>회원가입 페이지</>
+    return (
+        <>
+            <HeaderContainer />
+            <RegisterPageContainer  type = "register"/>
+        </>
+    );
 }
 
 export default RegisterPage;
