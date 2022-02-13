@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jumpstd.mukpick.admin.mapper.TermsCondMntMapper">
+    <select id="findTermsCondList">
+        select terms_no
+             , title
+             , content
+             , register_date
+             , user_id
+        from tb_terms_cond_mnt
+    </select>
+</mapper>
