@@ -1,4 +1,4 @@
-const ErrorMessage = ({ error }) => {
+const ErrorMessage = ({ error,onClick }) => {
   const { status, message, code } = error;
   return (
     <>

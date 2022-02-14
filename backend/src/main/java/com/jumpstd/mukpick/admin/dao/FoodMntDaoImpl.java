@@ -33,4 +33,9 @@ public class FoodMntDaoImpl implements FoodMntDao{
     public int deleteFoodInfo(Long foodNo) {
         return foodMntMapper.deleteFoodInfo(foodNo);
     }
+
+    @Override
+    public int chkDupleByFoodName(String foodName) {
+        return foodMntMapper.chkDupleByFoodName(foodName);
+    }
 }

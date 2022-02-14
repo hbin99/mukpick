@@ -2,6 +2,8 @@ import { memo, useCallback, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import AskModal from '../../common/AskModal';
 import InputModal from '../../common/InputModal';
+import ErrorMessage from '../../common/ErrorMessage';
+import ErrorMsgModal from '../../common/ErrorMsgModal';
 
 const FoodInfoItem = memo(({ item, deleteFoodInfo,updateFoodInfo }) => {
   const { foodNo, foodName, isShow, isDefault, registerDate } = item;
@@ -34,6 +36,7 @@ const FoodInfoItem = memo(({ item, deleteFoodInfo,updateFoodInfo }) => {
     updateFoodInfo(foodNo, 'foodName', inputText);
 
   },[updateFoodInfo,foodNo,foodName]);
+
 
   return (
     <tr>
@@ -111,7 +114,8 @@ const FoodInfoList = memo(({ list, deleteFoodInfo,updateFoodInfo }) => {
   );
 });
 
-const  FoodMnt = ({ searchBar, foodMntList, loading, deleteFoodInfo,updateFoodInfo }) => {
+
+const  FoodMnt = ({ searchBar, foodMntList, loading, deleteFoodInfo,updateFoodInfo, error, removeError }) => {
   return (
     <>
       <h1>음식명 관리</h1>
@@ -119,6 +123,9 @@ const  FoodMnt = ({ searchBar, foodMntList, loading, deleteFoodInfo,updateFoodIn
       {!loading && foodMntList && (
         <FoodInfoList list={foodMntList} deleteFoodInfo={deleteFoodInfo} updateFoodInfo={updateFoodInfo}/>
       )}
+      {(error&&error.status === 400)&&
+      <ErrorMsgModal error={error} onConfirm={removeError}/>
+      }
     </>
   );
 };

@@ -2,7 +2,13 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import FoodMnt from '../../components/admin/food_mnt/FoodMnt';
 import SearchBar from '../../components/admin/search_mnt/SearchBar';
-import { changeSearchCond, deleteFood, getFoodMntList, updateFood } from '../../modules/admin/foodMntModule';
+import {
+  changeSearchCond,
+  deleteFood,
+  getFoodMntList,
+  resetError,
+  updateFood,
+} from '../../modules/admin/foodMntModule';
 import qs from 'qs';
 import { useHistory, withRouter } from 'react-router';
 
@@ -56,6 +62,10 @@ const FoodMntContainer = ({ location }) => {
     }
   };
 
+  const removeError = () => {
+    dispatch(resetError());
+  }
+
   useEffect(() => {
     const { q, isShow, sort } = qs.parse(location.search, {
       ignoreQueryPrefix: true,
@@ -73,6 +83,7 @@ const FoodMntContainer = ({ location }) => {
             onKeyDown={onKeyDown}
           />
         }
+        removeError={removeError}
         foodMntList={foodMntList}
         loading={loading}
         error={error}

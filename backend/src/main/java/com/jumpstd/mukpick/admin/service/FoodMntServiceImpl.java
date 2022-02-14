@@ -5,6 +5,7 @@ import com.jumpstd.mukpick.admin.domain.FoodMntDomain;
 import com.jumpstd.mukpick.admin.dto.FoodRequestDto;
 import com.jumpstd.mukpick.admin.dto.FoodResponseDto;
 import com.jumpstd.mukpick.admin.dto.FoodUpdateRequestDto;
+import com.jumpstd.mukpick.admin.exception.AlreadyExistDataException;
 import com.jumpstd.mukpick.admin.exception.NoValidFoodNoException;
 import com.jumpstd.mukpick.common.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,11 @@ public class FoodMntServiceImpl implements FoodMntService{
     @Override
     public FoodResponseDto modifyFoodInfo(FoodUpdateRequestDto fudto) {
         if(fudto.getIsShow() != 'Y' && fudto.getIsShow() != 'N' && fudto.getFoodName() == null) return null;
+
+        if(chkDupleByFoodName(fudto.getFoodName())){
+            throw new AlreadyExistDataException(ErrorCode.ALREADY_EXIST_DATA);
+        }
+
         int successFlag = foodMntDao.updateFoodInfo(fudto);
         if(successFlag == 0){
             throw new NoValidFoodNoException(ErrorCode.NO_VALID_FOOD_NO);
@@ -55,5 +61,16 @@ public class FoodMntServiceImpl implements FoodMntService{
     @Override
     public int deleteFoodInfo(Long foodNo) {
         return foodMntDao.deleteFoodInfo(foodNo);
+    }
+
+    @Override
+    public boolean chkDupleByFoodName(String foodName) {
+        if(foodMntDao.chkDupleByFoodName(foodName) >= 1){
+            System.out.println("트루임");
+            return true;
+        }else{
+            System.out.println("거짓임");
+            return false;
+        }
     }
 }

@@ -14,4 +14,6 @@ public interface FoodMntService {
     FoodResponseDto modifyFoodInfo(FoodUpdateRequestDto fudto);
 
     int deleteFoodInfo(Long foodNo);
+
+    boolean chkDupleByFoodName(String foodName);
 }

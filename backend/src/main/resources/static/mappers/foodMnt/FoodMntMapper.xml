@@ -38,6 +38,12 @@
         AND FOOD_NO=#{foodNo}
         AND IS_SHOW != 'D'
     </select>
+    <select id="chkDupleByFoodName" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_FOOD
+        WHERE 1=1
+        AND FOOD_NAME = #{foodName}
+    </select>
     <update id="updateFoodInfo" parameterType="com.jumpstd.mukpick.admin.dto.FoodUpdateRequestDto">
         UPDATE TB_FOOD
         <trim prefix="SET" suffixOverrides=",">

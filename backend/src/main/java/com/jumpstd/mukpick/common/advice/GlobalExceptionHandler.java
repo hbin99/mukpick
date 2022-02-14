@@ -1,5 +1,6 @@
 package com.jumpstd.mukpick.common.advice;
 
+import com.jumpstd.mukpick.admin.exception.AlreadyExistDataException;
 import com.jumpstd.mukpick.admin.exception.NoValidFoodNoException;
 import com.jumpstd.mukpick.common.dto.ErrorResponse;
 import com.jumpstd.mukpick.common.exception.AuthenticationException;
@@ -32,6 +33,17 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleNoValidFoodNo(CustomException e){
         return ErrorResponse.builder()
                 .code(HttpStatus.NOT_FOUND)
+                .message(e.getErrorCode().getMessage())
+                .status(e.getErrorCode().getStatus())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AlreadyExistDataException.class)
+    public ErrorResponse AlreadyExistData(CustomException e){
+        return ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST)
                 .message(e.getErrorCode().getMessage())
                 .status(e.getErrorCode().getStatus())
                 .timestamp(LocalDateTime.now())

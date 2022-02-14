@@ -14,4 +14,6 @@ public interface FoodMntDao {
     int updateFoodInfo(FoodUpdateRequestDto fudto);
 
     int deleteFoodInfo(Long foodNo);
+
+    int chkDupleByFoodName(String foodName);
 }

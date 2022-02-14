@@ -9,6 +9,7 @@ public enum ErrorCode {
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED.value(), "사용할 수 없는 메서드입니다."),
 
     // BAD REQUEST : 400
+    ALREADY_EXIST_DATA(HttpStatus.BAD_REQUEST.value(), "이미 존재하는 데이터입니다."),
 
     // UNAUTHORIZED : 401
     UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED.value(), "로그인을 한 후 이용할 수 있습니다."),
@@ -19,7 +20,6 @@ public enum ErrorCode {
     // NOT FOUND : 404
     NO_VALID_FOOD_NO(HttpStatus.NOT_FOUND.value(), "유효하지 않은 음식 번호입니다."),
     NULL_DATA(HttpStatus.NOT_FOUND.value(), "데이터를 찾을 수 없습니다."),
-
 
     // SERVER ERROR : 500
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "내부 서버에서 오류가 발생했습니다."),

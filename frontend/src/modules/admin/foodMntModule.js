@@ -57,6 +57,9 @@ export function* updateFoodInfoSaga(){
   yield takeLatest(UPDATE_FOOD_INFO, updateFoodSaga);
 }
 
+const RESET_ERROR = 'food_mnt/RESET_ERROR';
+export const resetError = createAction(RESET_ERROR);
+
 const initialState = {
   foodMntList: null,
   error: null,
@@ -110,6 +113,10 @@ const foodMntModule = handleActions(
     [UPDATE_FOOD_INFO_FAILURE]: (state, {payload:error}) => ({
       ...state,
       error
+    }),
+    [RESET_ERROR]: (state) => ({
+      ...state,
+      error: null
     })
   },
   initialState,

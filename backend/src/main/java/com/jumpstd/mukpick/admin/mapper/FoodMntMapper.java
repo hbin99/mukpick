@@ -17,4 +17,5 @@ public interface FoodMntMapper {
 
     int deleteFoodInfo(Long foodNo);
 
+    int chkDupleByFoodName(String foodName);
 }
